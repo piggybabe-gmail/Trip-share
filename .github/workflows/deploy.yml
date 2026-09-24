@@ -1,0 +1,38 @@
+# ทุกครั้งที่มีการอัปโหลด/แก้ไฟล์ใน branch main → GitHub จะทดสอบสูตร แล้ว deploy ขึ้น Firebase ให้อัตโนมัติ
+name: Deploy to Firebase
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}   # กดรันเองได้จากแท็บ Actions
+
+permissions:
+  contents: read
+
+concurrency:
+  group: firebase-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: ทดสอบสูตรหารเงิน/โหวต
+        run: node test/logic.test.mjs
+
+      - name: Deploy เว็บ + Firestore rules
+        env:
+          SA_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          if [ -z "$SA_JSON" ]; then echo "::error::ยังไม่ได้ใส่ secret FIREBASE_SERVICE_ACCOUNT (Settings > Secrets and variables > Actions)"; exit 1; fi
+          printf '%s' "$SA_JSON" > "$RUNNER_TEMP/sa.json"
+          export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/sa.json"
+          npx -y firebase-tools@15 deploy --only hosting,firestore:rules --project trip-share-aead6 --non-interactive
+          rm -f "$RUNNER_TEMP/sa.json"
