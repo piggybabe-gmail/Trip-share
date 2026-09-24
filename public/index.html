@@ -1,0 +1,1508 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ทริปชิงเต่า 青岛</title>
+<meta name="description" content="ลงชื่อไปทริปชิงเต่า โหวตเปลี่ยนแพลน และหารค่าใช้จ่ายรายคน ให้ AI อ่านบิล สลิป ตั๋ว">
+<meta name="theme-color" content="#0E4C6B">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ชิงเต่า">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mitr:wght@500;600&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sea:#0E4C6B; --sea-2:#1B6E93; --roof:#C2412D; --amber:#D9981A;
+  --bg:#F3F6F7; --surface:#FFFFFF; --surface-2:#E8EFF2; --ink:#14212B; --muted:#5A6B76; --line:#D5E0E5;
+  --go:#1E7B4F; --go-bg:#E3F3EA; --maybe:#9A6A07; --maybe-bg:#FBF1D9; --no:#B3261E; --no-bg:#FBE7E5;
+  --shadow:0 1px 2px rgba(14,76,107,.08),0 6px 24px rgba(14,76,107,.06);
+  --display:"Mitr","IBM Plex Sans Thai",system-ui,sans-serif;
+  --body:"IBM Plex Sans Thai",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --sea:#5BB3DA; --sea-2:#7CC6E6; --roof:#E8705B; --amber:#F0B640;
+    --bg:#0B1419; --surface:#122029; --surface-2:#1A2C37; --ink:#E4EEF2; --muted:#93A7B3; --line:#24394A;
+    --go:#6FD39E; --go-bg:#133326; --maybe:#F0C35A; --maybe-bg:#33290F; --no:#F2998F; --no-bg:#3A1714;
+    --shadow:none; color-scheme:dark;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.6 var(--body);-webkit-font-smoothing:antialiased;
+  padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
+.wrap{max-width:880px;margin:0 auto;padding-inline:16px}
+h1,h2,h3{font-family:var(--display);font-weight:600;line-height:1.25;text-wrap:balance;margin:0}
+button,input,textarea,select{font:inherit;color:inherit}
+.num{font-variant-numeric:tabular-nums}
+[hidden]{display:none!important}
+
+/* hero */
+.hero{background:var(--sea);color:#fff;position:relative;overflow:hidden}
+@media (prefers-color-scheme:dark){.hero{background:#0D3347}}
+.hero .wrap{padding-block:28px 22px;position:relative;z-index:1}
+.hero .eyebrow{font-size:13px;letter-spacing:.08em;opacity:.85}
+.hero h1{font-size:clamp(30px,7vw,46px);margin-top:4px}
+.hero h1 .zh{font-weight:500;opacity:.75;margin-left:.3em}
+.hero p{margin:6px 0 0;opacity:.9;max-width:60ch}
+.hero .stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:4px 12px;font-size:13px;
+  background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22)}
+.pill b{font-weight:600}
+.roofs{position:absolute;right:-10px;bottom:0;width:min(46vw,340px);opacity:.9;z-index:0}
+
+/* tabs */
+.tabs{position:sticky;top:env(safe-area-inset-top,0);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.tabs .wrap{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.tab{appearance:none;border:0;background:none;padding:14px 10px 12px;cursor:pointer;color:var(--muted);font-weight:500;
+  border-bottom:3px solid transparent;white-space:nowrap}
+.tab[aria-selected="true"]{color:var(--sea);border-bottom-color:var(--roof)}
+.tab:focus-visible{outline:2px solid var(--sea);outline-offset:-2px;border-radius:6px}
+.tab .dot{display:inline-block;min-width:18px;padding:0 5px;border-radius:9px;background:var(--roof);color:#fff;font-size:11px;line-height:18px;text-align:center;margin-left:4px}
+
+main .wrap{padding-block:20px 48px;display:grid;gap:20px}
+main section{display:grid;gap:20px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow)}
+.card h2{font-size:20px}
+.card h3{font-size:16px}
+.card .sub{color:var(--muted);font-size:13.5px;margin:4px 0 0}
+.grid2{display:grid;gap:20px;grid-template-columns:1fr}
+@media (min-width:760px){.grid2{grid-template-columns:1fr 1fr}}
+main .wrap>*,.grid2>*,.card,section>*{min-width:0}
+
+/* form */
+form{display:grid;gap:12px;margin-top:14px}
+label{font-size:13.5px;color:var(--muted);display:grid;gap:4px}
+input[type=text],input[type=number],input[type=date],textarea,select{width:100%;border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:10px 12px;min-width:0}
+select{appearance:auto}
+textarea{min-height:64px;resize:vertical}
+input:focus,textarea:focus,select:focus{outline:2px solid var(--sea-2);outline-offset:0;border-color:transparent}
+.row{display:grid;gap:10px;grid-template-columns:1fr 1fr}
+.row3{display:grid;gap:10px;grid-template-columns:1.4fr 1fr}
+@media (max-width:520px){.row,.row3{grid-template-columns:1fr}}
+.seg{display:flex;gap:8px;flex-wrap:wrap}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg label{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:7px 14px;cursor:pointer;color:var(--ink);background:var(--bg)}
+.seg input:checked+label{border-color:var(--sea);background:var(--sea);color:#fff}
+.seg input:focus-visible+label{outline:2px solid var(--amber);outline-offset:2px}
+.btn{appearance:none;border:0;border-radius:10px;padding:11px 16px;font-weight:600;cursor:pointer;background:var(--roof);color:#fff}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.sea{background:var(--sea)}
+.btn.ghost{background:transparent;color:var(--sea);border:1px solid var(--line);font-weight:500;padding:7px 12px}
+.btn.small{padding:5px 10px;font-size:13px}
+.btn.link{background:none;border:0;color:var(--sea);padding:0 2px;font-weight:500;font-size:13px;text-decoration:underline;text-underline-offset:2px}
+.btn:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+.btns{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.msg{font-size:13.5px;min-height:1.2em;margin:0}
+.msg.err{color:var(--roof)} .msg.ok{color:var(--go)}
+.fieldlabel{font-size:13.5px;color:var(--muted);margin-bottom:6px}
+
+/* list */
+.counts{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.chip{border-radius:999px;padding:3px 10px;font-size:12.5px;font-weight:600;white-space:nowrap}
+.chip.go{background:var(--go-bg);color:var(--go)} .chip.maybe{background:var(--maybe-bg);color:var(--maybe)}
+.chip.no{background:var(--no-bg);color:var(--no)} .chip.info{background:var(--surface-2);color:var(--sea)}
+ul.people{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:8px}
+ul.people li{display:grid;grid-template-columns:36px 1fr auto;gap:10px;align-items:center;padding:10px;border-radius:10px;background:var(--bg)}
+.avatar{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-family:var(--display);color:#fff;background:var(--sea-2);flex:none}
+.who b{display:block;font-weight:600}
+.who small{color:var(--muted);display:block;overflow-wrap:anywhere}
+.row-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.empty{color:var(--muted);text-align:center;padding:18px 8px;border:1px dashed var(--line);border-radius:10px;margin-top:14px}
+.share{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:12px;font-size:13.5px;color:var(--muted)}
+.share code{background:var(--bg);padding:4px 8px;border-radius:6px;overflow-wrap:anywhere;color:var(--ink)}
+
+/* me bar */
+.mebar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:12px 16px}
+.mebar select{width:auto;min-width:160px;padding:7px 10px}
+.mebar .status{flex:1 1 200px}
+
+/* itinerary */
+.day{display:grid;grid-template-columns:64px 1fr;gap:14px;padding:16px 0;border-top:1px solid var(--line)}
+.day:first-of-type{border-top:0;padding-top:6px}
+.dnum{font-family:var(--display);color:var(--roof);font-size:13px;letter-spacing:.06em}
+.dnum b{display:block;font-size:30px;line-height:1;color:var(--sea)}
+.dnum small{display:block;color:var(--muted);font-family:var(--body);letter-spacing:0;font-size:12px;margin-top:4px}
+.day h3{font-size:17px}
+.day ul{margin:6px 0 0;padding-left:18px;color:var(--ink)}
+.day li{margin:2px 0}
+.day li .zh{color:var(--muted);font-size:13px}
+.day .btn.link{font-size:12.5px}
+.tag{display:inline-block;font-size:12px;color:var(--muted);background:var(--surface-2);border-radius:6px;padding:1px 7px;margin-left:4px;font-family:var(--body);font-weight:500}
+.inc{display:grid;gap:6px;margin:10px 0 0;padding:0;list-style:none}
+.inc li{padding-left:22px;position:relative}
+.inc li::before{content:"";position:absolute;left:4px;top:.6em;width:8px;height:8px;border-radius:2px;background:var(--amber)}
+.inc.no li::before{background:var(--line)}
+.plan-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.flash{animation:flash 2.4s ease-out}
+@keyframes flash{0%{background:var(--maybe-bg)}100%{background:transparent}}
+
+/* proposals */
+ol.props{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:10px}
+.prop{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--bg);display:grid;gap:8px}
+.prop.top{border-color:var(--amber);box-shadow:inset 4px 0 0 var(--amber)}
+.prop .head{display:flex;gap:10px;align-items:flex-start}
+.rank{font-family:var(--display);font-size:13px;color:#fff;background:var(--sea);border-radius:8px;padding:2px 8px;white-space:nowrap}
+.prop.top .rank{background:var(--amber);color:#1b1300}
+.prop .title{font-weight:600;flex:1;overflow-wrap:anywhere}
+.prop .why{color:var(--muted);font-size:13.5px;margin:0;overflow-wrap:anywhere}
+.bar{height:8px;border-radius:4px;background:var(--surface-2);overflow:hidden;display:flex}
+.bar i{display:block;height:100%}
+.bar .u{background:var(--go)} .bar .d{background:var(--no)}
+.vote{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.vbtn{appearance:none;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;cursor:pointer;font-weight:600;font-size:13.5px}
+.vbtn[aria-pressed="true"].up{background:var(--go);border-color:var(--go);color:#fff}
+.vbtn[aria-pressed="true"].down{background:var(--no);border-color:var(--no);color:#fff}
+.vbtn:disabled{opacity:.5;cursor:not-allowed}
+.voters{font-size:12.5px;color:var(--muted);overflow-wrap:anywhere}
+
+/* costs/summary */
+.people-pick{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.people-pick button{appearance:none;border:1px solid var(--line);background:var(--bg);border-radius:10px;min-width:44px;padding:8px 10px;cursor:pointer;font-weight:600}
+.people-pick button[aria-pressed="true"]{background:var(--sea);border-color:var(--sea);color:#fff}
+.people-pick button:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+.summary{display:grid;gap:12px;grid-template-columns:1fr}
+@media (min-width:640px){.summary{grid-template-columns:1fr 1fr 1fr}}
+.tile{border-radius:14px;padding:16px;border:1px solid var(--line);background:var(--surface)}
+.tile .k{font-size:13px;color:var(--muted)}
+.tile .v{font-family:var(--display);font-size:28px;line-height:1.2;margin-top:4px;overflow-wrap:anywhere}
+.tile .n{font-size:12.5px;color:var(--muted);margin-top:4px}
+.tile.flight{border-color:var(--amber)} .tile.flight .v{color:var(--amber)}
+.tile.total{background:var(--sea);border-color:var(--sea);color:#fff} .tile.total .k,.tile.total .n{color:rgba(255,255,255,.8)}
+@media (prefers-color-scheme:dark){.tile.total{background:#0D3347;border-color:#1E5673}}
+.tile.pos .v{color:var(--go)} .tile.neg .v{color:var(--roof)}
+.tbl-wrap{overflow-x:auto;margin-top:12px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-size:12.5px;color:var(--muted);font-weight:500}
+td.r,th.r{text-align:right;white-space:nowrap}
+td small{display:block;color:var(--muted);font-size:12.5px}
+tr.sum td{font-weight:600;border-bottom:0}
+tr.clickable{cursor:pointer} tr.clickable:hover td{background:var(--bg)}
+tr.detail td{background:var(--bg);font-size:13px}
+.pos{color:var(--go)} .neg{color:var(--roof)}
+.note{font-size:13px;color:var(--muted);margin:10px 0 0}
+.status{font-size:12.5px;color:var(--muted)}
+footer{color:var(--muted);font-size:12.5px;text-align:center;padding:0 16px 32px}
+
+/* scan */
+.scan{border:1.5px dashed var(--sea-2);border-radius:12px;padding:14px;display:grid;gap:8px;margin-top:14px;background:var(--bg)}
+.scan.drag{background:var(--surface-2)}
+.scan .btns .btn{flex:1 1 auto}
+.rcpt{max-width:100%;max-height:260px;border-radius:8px;border:1px solid var(--line);justify-self:start;object-fit:contain}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:sp .8s linear infinite;vertical-align:-2px;margin-right:6px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.picks{display:flex;gap:6px;flex-wrap:wrap}
+.pk{appearance:none;border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:5px 11px;cursor:pointer;font-size:13.5px}
+.pk[aria-pressed="true"]{background:var(--sea);border-color:var(--sea);color:#fff}
+.pk.sm{padding:2px 8px;font-size:12.5px}
+.box{border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;gap:10px}
+.exact-row{display:grid;grid-template-columns:1fr 130px;gap:8px;align-items:center}
+.item-row{display:grid;gap:6px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.item-row:last-of-type{border-bottom:0;padding-bottom:0}
+.item-row .top{display:grid;grid-template-columns:1fr 110px 34px;gap:6px}
+.item-row .top button{appearance:none;border:1px solid var(--line);background:var(--surface);border-radius:8px;cursor:pointer;color:var(--muted)}
+.preview{display:flex;gap:6px;flex-wrap:wrap}
+.preview span{background:var(--surface-2);border-radius:8px;padding:3px 9px;font-size:13px}
+
+/* expenses list */
+.explist{display:grid;gap:8px;margin-top:12px}
+details.exp{border-radius:10px;background:var(--bg);border:1px solid transparent}
+details.exp[open]{border-color:var(--line)}
+details.exp summary{list-style:none;display:grid;grid-template-columns:36px 1fr auto;gap:10px;align-items:center;padding:10px;cursor:pointer}
+details.exp summary::-webkit-details-marker{display:none}
+details.exp .ico{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:var(--surface);font-size:18px}
+.amt{text-align:right}
+.amt b{display:block;font-variant-numeric:tabular-nums}
+.amt small{display:block;color:var(--muted);font-size:12px;white-space:nowrap}
+.amt .mine{color:var(--sea);font-weight:600}
+.exp-body{padding:0 12px 12px;display:grid;gap:10px}
+.exp-body table{font-size:13px}
+.daysep{font-size:12.5px;color:var(--muted);margin:8px 2px 0;font-weight:600}
+.settle{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:8px}
+.settle li{display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:var(--bg);border-radius:10px;padding:10px 12px}
+.settle li .txt{flex:1 1 200px}
+@media (prefers-reduced-motion:no-preference){.tab,.btn,.people-pick button,.pk,.vbtn{transition:background .15s,color .15s,border-color .15s}}
+@media (prefers-reduced-motion:reduce){.flash{animation:none}.spin{animation:none}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">TRIP SHARE · ทัวร์ส่วนตัว 5 วัน 4 คืน</div>
+    <h1>ทริปชิงเต่า<span class="zh">青岛</span></h1>
+    <p>เมืองทะเลหลังคาแดงสไตล์เยอรมัน บ้านเกิดเบียร์ Tsingtao ลงชื่อ โหวตแพลน และหารค่าใช้จ่ายกันได้ในที่เดียว</p>
+    <div class="stats">
+      <span class="pill">ไปแน่นอน <b class="num" id="heroGo">–</b> คน</span>
+      <span class="pill">ยังไม่แน่ใจ <b class="num" id="heroMaybe">–</b> คน</span>
+      <span class="pill">ประมาณ <b class="num" id="heroPP">–</b> บาท/คน รวมตั๋ว</span>
+      <span class="pill" id="heroSpentPill" hidden>ใช้จริงแล้ว <b class="num" id="heroSpent">–</b> บาท</span>
+    </div>
+  </div>
+  <svg class="roofs" viewBox="0 0 340 90" aria-hidden="true">
+    <g fill="#C2412D" opacity=".95">
+      <path d="M10 90V52l28-24 28 24v38z"/><path d="M78 90V44l22-20 22 20v46z"/>
+      <path d="M132 90V36l12-10v-8h8v2l14 16v54z"/><path d="M176 90V56l30-26 30 26v34z"/>
+      <path d="M248 90V48l20-18 20 18v42z"/><path d="M296 90V58l22-18 22 18v32z"/>
+    </g>
+    <g fill="#F3F6F7" opacity=".85">
+      <rect x="30" y="62" width="8" height="10"/><rect x="94" y="56" width="8" height="10"/>
+      <rect x="146" y="50" width="6" height="12"/><rect x="200" y="64" width="10" height="10"/>
+      <rect x="262" y="60" width="8" height="10"/><rect x="314" y="66" width="8" height="10"/>
+    </g>
+  </svg>
+</header>
+
+<nav class="tabs" aria-label="ส่วนของแอป">
+  <div class="wrap" role="tablist">
+    <button class="tab" role="tab" id="t-signup" aria-controls="p-signup" aria-selected="true">ลงชื่อ</button>
+    <button class="tab" role="tab" id="t-plan" aria-controls="p-plan" aria-selected="false">แพลน &amp; โหวต<span class="dot" id="propDot" hidden></span></button>
+    <button class="tab" role="tab" id="t-split" aria-controls="p-split" aria-selected="false">หารค่าใช้จ่าย</button>
+    <button class="tab" role="tab" id="t-cost" aria-controls="p-cost" aria-selected="false">ประมาณการ</button>
+  </div>
+</nav>
+
+<main>
+<div class="wrap">
+
+<!-- ===== SIGN-UP ===== -->
+<section id="p-signup" role="tabpanel" aria-labelledby="t-signup">
+  <div class="grid2">
+    <div class="card">
+      <h2>อยากไปด้วย ลงชื่อเลย</h2>
+      <p class="sub">ไม่ต้องสมัครสมาชิก รายชื่อนี้ทุกคนที่มีลิงก์จะเห็น แก้ไขหรือลบได้เฉพาะชื่อที่ตัวเองลงจากเครื่องนี้</p>
+      <form id="signupForm" novalidate>
+        <label for="fName">ชื่อ / ชื่อเล่น
+          <input type="text" id="fName" maxlength="40" autocomplete="nickname" placeholder="เช่น นกยูง" required>
+        </label>
+        <div>
+          <div class="fieldlabel">สถานะ</div>
+          <div class="seg">
+            <input type="radio" name="status" id="sGo" value="go" checked><label for="sGo">ไปแน่นอน</label>
+            <input type="radio" name="status" id="sMaybe" value="maybe"><label for="sMaybe">ยังไม่แน่ใจ</label>
+          </div>
+        </div>
+        <label for="fNote">หมายเหตุ (ไม่ใส่ก็ได้)
+          <textarea id="fNote" maxlength="200" placeholder="เช่น ขอห้องพักคู่กับเพื่อน, ไม่ทานเนื้อ"></textarea>
+        </label>
+        <div class="btns">
+          <button class="btn" type="submit" id="submitBtn" disabled>ลงชื่อ</button>
+          <button class="btn ghost" type="button" id="cancelEdit" hidden>ยกเลิกการแก้ไข</button>
+        </div>
+        <p class="msg" id="formMsg" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>รายชื่อคนที่ลงแล้ว</h2>
+      <div class="counts">
+        <span class="chip go">ไปแน่นอน <span class="num" id="cGo">0</span></span>
+        <span class="chip maybe">ยังไม่แน่ใจ <span class="num" id="cMaybe">0</span></span>
+      </div>
+      <p class="status" id="connStatus">กำลังเชื่อมต่อ…</p>
+      <ul class="people" id="peopleList"></ul>
+      <div class="empty" id="emptyList" hidden>ยังไม่มีใครลงชื่อ เป็นคนแรกเลย</div>
+      <div class="share">
+        <span>ส่งลิงก์ให้เพื่อน:</span><code id="shareUrl"></code>
+        <button class="btn ghost small" type="button" id="copyBtn">คัดลอกลิงก์</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PLAN & VOTE ===== -->
+<section id="p-plan" role="tabpanel" aria-labelledby="t-plan" hidden>
+  <div class="card mebar">
+    <span>คุณคือ</span>
+    <select class="meSel" aria-label="เลือกว่าคุณคือใคร"></select>
+    <span class="status meHint"></span>
+  </div>
+
+  <div class="card" id="planCard">
+    <h2>โปรแกรมทัวร์ส่วนตัว 5 วัน 4 คืน</h2>
+    <p class="sub">บินตรง กรุงเทพฯ (BKK) – ชิงเต่า (TAO) ประมาณ 4 ชม. 40 นาที · รถ MPV ส่วนตัวพร้อมคนขับ + ไกด์ · ไม่เข้าร้านช้อปบังคับ · แพลนนี้เปลี่ยนได้ด้วยการโหวต</p>
+    <div class="plan-meta">
+      <span class="chip info" id="planDate">วันเดินทาง: ยังไม่กำหนด</span>
+      <span class="chip info" id="planVer">แพลนฉบับที่ 1</span>
+    </div>
+    <div id="days"></div>
+    <div id="planNotesWrap" hidden>
+      <h3 style="margin-top:12px">มติเพิ่มเติมจากการโหวต</h3>
+      <ul class="inc" id="planNotes"></ul>
+    </div>
+  </div>
+
+  <div class="card" id="propFormCard">
+    <h2>เสนอเปลี่ยนแพลน</h2>
+    <p class="sub" id="propRule">ทุกคนที่ลงชื่อโหวตได้คนละ 1 เสียง ข้อเสนอที่ได้เสียงเห็นด้วยเกินครึ่งของคนที่ "ไปแน่นอน" จะปรับแพลนให้อัตโนมัติ</p>
+    <form id="propForm" novalidate>
+      <label>อยากเปลี่ยนอะไร
+        <select id="pType">
+          <option value="add">เพิ่มที่เที่ยว / กิจกรรม</option>
+          <option value="remove">ตัดที่เที่ยวออก</option>
+          <option value="move">ย้ายที่เที่ยวไปอีกวัน</option>
+          <option value="swap">สลับทั้งวัน (เลื่อนแพลนทั้งวัน)</option>
+          <option value="date">เลื่อนวันเดินทาง</option>
+          <option value="other">เรื่องอื่นๆ (เช่น เปลี่ยนโรงแรม ร้านอาหาร)</option>
+        </select>
+      </label>
+      <div class="row">
+        <label data-show="add remove move swap">วันที่
+          <select id="pDay"></select>
+        </label>
+        <label data-show="move swap">ไปที่วันที่
+          <select id="pToDay"></select>
+        </label>
+        <label data-show="remove move">รายการ
+          <select id="pItem"></select>
+        </label>
+        <label data-show="date">วันออกเดินทางใหม่
+          <input type="date" id="pDate">
+        </label>
+      </div>
+      <label data-show="add other"><span id="pTextLbl">ชื่อที่เที่ยว / กิจกรรม</span>
+        <input type="text" id="pText" maxlength="120" placeholder="เช่น ตลาดกลางคืนเถาเลอ">
+      </label>
+      <label data-show="add">ชื่อภาษาจีน (ไม่ใส่ก็ได้)
+        <input type="text" id="pZh" maxlength="40" placeholder="เช่น 台东夜市">
+      </label>
+      <label>เหตุผล (ไม่ใส่ก็ได้)
+        <textarea id="pWhy" maxlength="300" placeholder="เช่น วันที่ 3 แน่นเกินไป อยากพักผ่อนบ้าง"></textarea>
+      </label>
+      <div class="btns">
+        <button class="btn" type="submit" id="propSubmit">ส่งข้อเสนอ</button>
+      </div>
+      <p class="msg" id="propMsg" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>ข้อเสนอที่รอโหวต</h2>
+    <p class="sub">เรียงตามคะแนน (เห็นด้วย − ไม่เห็นด้วย) ข้อที่คนอยากได้มากที่สุดขึ้นก่อน</p>
+    <ol class="props" id="propList"></ol>
+    <div class="empty" id="propEmpty">ยังไม่มีข้อเสนอ อยากเปลี่ยนตรงไหนเสนอด้านบนได้เลย</div>
+  </div>
+
+  <div class="card" id="histCard" hidden>
+    <h2>ประวัติการเปลี่ยนแพลน</h2>
+    <ol class="props" id="histList"></ol>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h2>ราคารวม</h2>
+      <ul class="inc" id="incList"></ul>
+    </div>
+    <div class="card">
+      <h2>ไม่รวม / ต้องเตรียมเอง</h2>
+      <ul class="inc no" id="excList"></ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SPLIT EXPENSES ===== -->
+<section id="p-split" role="tabpanel" aria-labelledby="t-split" hidden>
+  <div class="card mebar">
+    <span>คุณคือ</span>
+    <select class="meSel" aria-label="เลือกว่าคุณคือใคร"></select>
+    <span class="status meHint"></span>
+  </div>
+
+  <div class="summary">
+    <div class="tile">
+      <div class="k">ใช้จ่ายจริงรวมทั้งทริป</div>
+      <div class="v num" id="tTotal">0 ฿</div>
+      <div class="n" id="tTotalN">ยังไม่มีรายการ</div>
+    </div>
+    <div class="tile">
+      <div class="k">คุณจ่ายไปแล้ว</div>
+      <div class="v num" id="tPaid">–</div>
+      <div class="n" id="tPaidN">ส่วนของคุณเอง –</div>
+    </div>
+    <div class="tile total" id="tNetTile">
+      <div class="k" id="tNetK">ยอดสุทธิของคุณ</div>
+      <div class="v num" id="tNet">–</div>
+      <div class="n" id="tNetN">เลือกชื่อคุณด้านบนก่อน</div>
+    </div>
+  </div>
+
+  <div class="card" id="expCard">
+    <h2 id="expFormTitle">เพิ่มค่าใช้จ่าย</h2>
+    <p class="sub">ใส่เองหรือให้ AI อ่านจากรูปบิล ใบเสร็จ สลิปโอนเงิน หรือตั๋ว แล้วเลือกว่าหารกับใคร</p>
+
+    <div class="scan" id="scanBox">
+      <input type="file" id="fileCam" accept="image/*" capture="environment" hidden>
+      <input type="file" id="fileAny" accept="image/*,application/pdf" hidden>
+      <div class="btns">
+        <button class="btn sea" type="button" id="camBtn">📷 ถ่ายรูปบิล</button>
+        <button class="btn ghost" type="button" id="pickBtn">เลือกรูป / PDF</button>
+      </div>
+      <p class="status" style="margin:0">AI จะอ่านร้าน วันที่ ยอดเงิน สกุลเงิน และรายการในบิลให้ ถ้าเป็นสลิปโอนคืนกันจะจับคู่ชื่อคนโอน-คนรับให้ ตรวจแล้วค่อยกดบันทึก</p>
+      <p class="msg" id="aiMsg" role="status" aria-live="polite"></p>
+      <img class="rcpt" id="rcptPrev" alt="ภาพบิลที่เลือก" hidden>
+    </div>
+
+    <form id="expForm" novalidate>
+      <div class="seg" role="radiogroup" aria-label="ประเภท">
+        <input type="radio" name="kind" id="kExp" value="expense" checked><label for="kExp">ค่าใช้จ่าย</label>
+        <input type="radio" name="kind" id="kSettle" value="settle"><label for="kSettle">โอนคืนกัน</label>
+      </div>
+      <div class="row3" data-kind="expense">
+        <label>รายการ
+          <input type="text" id="eTitle" maxlength="80" placeholder="เช่น ซีฟู้ดถนนหยุนเซียว">
+        </label>
+        <label>หมวด
+          <select id="eCat"></select>
+        </label>
+      </div>
+      <div class="row">
+        <label>จำนวนเงิน
+          <input type="number" id="eAmt" inputmode="decimal" min="0" step="0.01" placeholder="0.00">
+        </label>
+        <div>
+          <div class="fieldlabel">สกุลเงิน</div>
+          <div class="seg">
+            <input type="radio" name="cur" id="cTHB" value="THB" checked><label for="cTHB">บาท ฿</label>
+            <input type="radio" name="cur" id="cCNY" value="CNY"><label for="cCNY">หยวน ¥</label>
+          </div>
+        </div>
+      </div>
+      <div class="row" id="rateRow" hidden>
+        <label>อัตราแลกเปลี่ยน (บาท ต่อ 1 หยวน)
+          <input type="number" id="eRate" inputmode="decimal" min="0" step="0.0001">
+        </label>
+        <div class="status" id="thbOut" style="align-self:end;padding-bottom:10px"></div>
+      </div>
+      <div class="row">
+        <label><span id="payerLbl">ใครจ่าย</span>
+          <select id="ePayer"></select>
+        </label>
+        <label data-kind="expense">วันที่
+          <input type="date" id="eDate">
+        </label>
+        <label data-kind="settle">โอนให้ใคร
+          <select id="eTo"></select>
+        </label>
+      </div>
+
+      <div data-kind="expense">
+        <div class="fieldlabel">หารกับใคร <span id="partCount"></span></div>
+        <div class="picks" id="partPicks"></div>
+        <div class="btns" style="margin-top:8px">
+          <button class="btn link" type="button" data-act="p-go">เฉพาะคนที่ไปแน่นอน</button>
+          <button class="btn link" type="button" data-act="p-all">ทุกคน</button>
+          <button class="btn link" type="button" data-act="p-payer">เฉพาะคนจ่าย (ค่าใช้จ่ายส่วนตัว)</button>
+        </div>
+      </div>
+
+      <div data-kind="expense">
+        <div class="fieldlabel">วิธีหาร</div>
+        <div class="seg">
+          <input type="radio" name="mode" id="mEq" value="equal" checked><label for="mEq">หารเท่ากัน</label>
+          <input type="radio" name="mode" id="mEx" value="exact"><label for="mEx">กำหนดเองรายคน</label>
+          <input type="radio" name="mode" id="mIt" value="items"><label for="mIt">หารตามรายการที่สั่ง</label>
+        </div>
+      </div>
+      <div class="box" id="exactBox" hidden></div>
+      <div class="box" id="itemsBox" hidden></div>
+
+      <label data-kind="expense">หมายเหตุ (ไม่ใส่ก็ได้)
+        <input type="text" id="eNote" maxlength="200" placeholder="เช่น รวมค่าบริการ 10% แล้ว">
+      </label>
+
+      <div>
+        <div class="fieldlabel">ส่วนที่แต่ละคนต้องรับผิดชอบ</div>
+        <div class="preview" id="preview"><span>ใส่จำนวนเงินก่อน</span></div>
+      </div>
+
+      <div class="btns">
+        <button class="btn" type="submit" id="expSave">บันทึก</button>
+        <button class="btn ghost" type="button" id="expReset">ล้างฟอร์ม</button>
+      </div>
+      <p class="msg" id="expMsg" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>สรุปรายคน และใครต้องโอนให้ใคร</h2>
+    <p class="sub">"สุทธิ" บวก = ได้เงินคืน ลบ = ต้องจ่ายเพิ่ม กดที่ชื่อเพื่อดูรายละเอียดของคนนั้น</p>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>ชื่อ</th><th class="r">จ่ายไป</th><th class="r">ส่วนของตัวเอง</th><th class="r">สุทธิ</th></tr></thead>
+      <tbody id="balBody"></tbody>
+    </table></div>
+    <h3 style="margin-top:16px">โอนคืนกันแบบนี้ ยอดจะเคลียร์หมด</h3>
+    <ul class="settle" id="settleList"></ul>
+    <div class="btns" style="margin-top:14px">
+      <button class="btn ghost small" type="button" id="copySum">คัดลอกสรุปส่ง LINE</button>
+      <button class="btn ghost small" type="button" id="csvBtn">ดาวน์โหลด Excel (CSV)</button>
+      <span class="msg" id="sumMsg" role="status" aria-live="polite"></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="btns" style="justify-content:space-between">
+      <h2>รายการทั้งหมด</h2>
+      <select id="fltWho" style="width:auto" aria-label="กรองตามคน"></select>
+    </div>
+    <div class="explist" id="expList"></div>
+    <div class="empty" id="expEmpty">ยังไม่มีค่าใช้จ่าย ถ่ายรูปบิลแรกได้เลย</div>
+  </div>
+</section>
+
+<!-- ===== ESTIMATE ===== -->
+<section id="p-cost" role="tabpanel" aria-labelledby="t-cost" hidden>
+  <div class="card">
+    <h2>ประมาณการค่าใช้จ่ายต่อคน</h2>
+    <p class="sub" id="pickHint">เลือกจำนวนคนที่ไป</p>
+    <div class="people-pick" id="peoplePick" role="group" aria-label="จำนวนคน"></div>
+  </div>
+
+  <div class="summary">
+    <div class="tile">
+      <div class="k">ค่าทัวร์ต่อคน (ไม่รวมตั๋ว)</div>
+      <div class="v num" id="sLand">–</div>
+      <div class="n" id="sLandN"></div>
+    </div>
+    <div class="tile flight">
+      <div class="k">ตั๋วเครื่องบินต่อคน · ไม่หาร</div>
+      <div class="v num" id="sFlight">–</div>
+      <div class="n">ไป-กลับ บินตรง รวมกระเป๋า 20 กก. แต่ละคนจ่ายเอง</div>
+    </div>
+    <div class="tile total">
+      <div class="k">รวมทั้งหมดต่อคน</div>
+      <div class="v num" id="sTotal">–</div>
+      <div class="n" id="sTotalN"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>ค่าใช้จ่ายส่วนกลาง (หารเท่ากัน)</h2>
+    <p class="sub">ค่าที่พัก รถ และไกด์ คิดเป็นยอดรวมของทั้งกลุ่ม แล้วหารตามจำนวนคน</p>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>รายการ</th><th class="r">รวมทั้งกลุ่ม</th><th class="r">ต่อคน</th></tr></thead>
+      <tbody id="sharedBody"></tbody>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <h2>ค่าใช้จ่ายรายคน (ไม่หาร)</h2>
+    <p class="sub">แต่ละคนจ่ายเท่ากันไม่ว่าจะไปกี่คน</p>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>รายการ</th><th class="r">ต่อคน</th></tr></thead>
+      <tbody id="personalBody"></tbody>
+    </table></div>
+    <p class="note">ราคาเป็นการประมาณ ณ ก.ย. 2026 ที่อัตรา 1 หยวน ≈ <span id="rateTxt"></span> บาท ราคาตั๋วเครื่องบินและโรงแรมขึ้นลงตามวันเดินทาง ควรเช็กอีกครั้งตอนจองจริง คนไทยเข้าจีนได้โดยไม่ต้องขอวีซ่า 30 วัน (ข้อตกลงยกเว้นวีซ่าไทย–จีน) แต่ควรตรวจสอบอีกครั้งก่อนเดินทาง ยอดที่จ่ายจริงดูได้ที่แท็บ "หารค่าใช้จ่าย"</p>
+  </div>
+</section>
+
+</div>
+</main>
+<footer>Trip Share · สร้างโดย อินังคนรู้ดี สำหรับ นกยูง</footer>
+
+<script type="module">
+import * as L from "./logic.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, updateDoc, deleteDoc, setDoc, getDoc, doc, onSnapshot, query, orderBy,
+         serverTimestamp, runTransaction, deleteField } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+/* ============== SETTINGS (แก้ได้ที่นี่) ============== */
+const FB_VER = "12.19.0";
+const firebaseConfig = {
+  apiKey: "AIzaSyAQpDb3dXWRDHU4gJveD4pfFkUYuXxNtWg",
+  authDomain: "trip-share-aead6.firebaseapp.com",
+  projectId: "trip-share-aead6",
+  storageBucket: "trip-share-aead6.firebasestorage.app",
+  messagingSenderId: "213309730792",
+  appId: "1:213309730792:web:9b17c9ce1ce1c84f08be5d"
+};
+const TRIP_ID = "qingdao";
+const AI_MODELS = ["gemini-3.8-flash", "gemini-3.5-flash"];  // ตัวหลัก → ตัวสำรอง (Firebase AI Logic, Gemini Developer API ใช้ฟรีบน Spark plan)
+const AI_TIMEOUT_MS = 30000;              // ตัวไหนช้าเกินนี้ สลับไปตัวถัดไปอัตโนมัติ
+// App Check: Firebase บังคับใช้กับ AI Logic ตั้งแต่ 2 พ.ย. 2026 — ใส่ site key แล้วเลือกชนิด ("enterprise" หรือ "v3")
+const APP_CHECK = { provider: "enterprise", siteKey: "6Le3bcotAAAAAANQYjV6FUFJYOfyQV7YqjtyECE8" };
+const DEFAULT_RATE = 4.95;                // บาท ต่อ 1 หยวน (ก.ย. 2026)
+
+/* ============== ESTIMATE DATA ============== */
+const RATE = DEFAULT_RATE;
+const NIGHTS = 4;
+const TOUR_DAYS = 3;
+const TRIP = {
+  flight: 11000,
+  shared: [
+    { key:"hotel", name:"โรงแรม 4 ดาว ย่านชายทะเล/เมืองเก่า", calc:n=>Math.ceil(n/2)*NIGHTS*2100,
+      detail:n=>`${Math.ceil(n/2)} ห้อง × ${NIGHTS} คืน × 2,100 บาท (≈420 หยวน) · พักห้องละ 2 คน` },
+    { key:"car", name:"รถส่วนตัวพร้อมคนขับ", calc:n=>{const big=n>6; return Math.round(((big?1300:1000)*TOUR_DAYS+(big?450:350)*2)*RATE)},
+      detail:n=>n>6?`รถตู้ 14 ที่นั่ง ${TOUR_DAYS} วัน × 1,300 หยวน + รับส่งสนามบิน 2 เที่ยว`:`MPV 7 ที่นั่ง ${TOUR_DAYS} วัน × 1,000 หยวน + รับส่งสนามบิน 2 เที่ยว` },
+    { key:"guide", name:"ไกด์ท้องถิ่น (พูดไทย/อังกฤษ)", calc:n=>Math.round(1000*TOUR_DAYS*RATE), detail:()=>`${TOUR_DAYS} วัน × 1,000 หยวน` },
+    { key:"tips", name:"ค่าอาหารและทิปไกด์กับคนขับ", calc:n=>Math.round(300*TOUR_DAYS*RATE), detail:()=>`${TOUR_DAYS} วัน × 300 หยวน` },
+  ],
+  personal: [
+    { name:"ค่าเข้าชมสถานที่", thb:Math.round(350*RATE), detail:"เขาเหลาซาน+รถชัตเติ้ล+กระเช้า, พิพิธภัณฑ์เบียร์ชิงเต่า, โบสถ์เซนต์ไมเคิล, สวนเสี่ยวอวี๋ซาน ≈ 350 หยวน" },
+    { name:"ค่าอาหาร 4 วันครึ่ง", thb:Math.round(4.5*180*RATE), detail:"เฉลี่ยวันละ ≈180 หยวน รวมมื้อซีฟู้ด" },
+    { name:"ประกันการเดินทาง", thb:600, detail:"แผนเอเชีย 5 วัน" },
+    { name:"eSIM เน็ตจีน 5 วัน", thb:350, detail:"เลือกแบบที่เปิดใช้ LINE/Google ได้" },
+  ],
+};
+/* แพลนตั้งต้น — หลังจากนี้แพลนจริงเก็บใน Firestore และเปลี่ยนได้ด้วยการโหวตเท่านั้น */
+const DEFAULT_PLAN = { version:1, startDate:"", notes:[], days:[
+  { t:"บินตรงสู่ชิงเต่า · ถนนคนเดินไถตง", tag:"เย็น–ค่ำ", items:[
+    ["ออกจากสุวรรณภูมิ บินตรงประมาณ 4 ชม. 40 นาที (Qingdao Airlines / Shandong Airlines)",""],
+    ["ถึงสนามบินเจียวตง ไกด์และรถรับเข้าที่พัก",""],
+    ["มื้อค่ำและเดินเล่นถนนคนเดินไถตง","台东步行街"] ] },
+  { t:"เมืองเก่าสไตล์เยอรมัน · ริมทะเล", tag:"", items:[
+    ["สะพานจั้นเฉียว สัญลักษณ์ของชิงเต่า","栈桥"],
+    ["โบสถ์เซนต์ไมเคิล และตรอกเมืองเก่า","天主教堂"],
+    ["สวนเสี่ยวอวี๋ซาน ชมวิวหลังคาแดงทั้งเมือง","小鱼山公园"],
+    ["ย่านวิลล่าปาต้ากวน","八大关"],
+    ["จัตุรัส 4 พฤษภา และศูนย์เรือใบโอลิมปิก ช่วงพระอาทิตย์ตก","五四广场 · 奥帆中心"],
+    ["มื้อค่ำซีฟู้ดถนนหยุนเซียว","云霄路"] ] },
+  { t:"เขาเหลาซาน ภูเขาเต๋าริมทะเล", tag:"เต็มวัน", items:[
+    ["เขาเหลาซาน วัดไท่ชิง ขึ้นกระเช้าชมทะเลเหลือง","崂山 · 太清宫"],
+    ["ชิมชาเขียวเหลาซาน",""],
+    ["แวะหาดสือเหล่าเหริน ชมพระอาทิตย์ตก","石老人海水浴场"] ] },
+  { t:"เบียร์ชิงเต่าต้นตำรับ · ข้ามอ่าวเจียวโจว", tag:"", items:[
+    ["พิพิธภัณฑ์เบียร์ชิงเต่า ชิมเบียร์สดจากโรงงาน","青岛啤酒博物馆"],
+    ["ถนนเบียร์เติงโจว","登州路啤酒街"],
+    ["ลอดอุโมงค์ใต้ทะเลไปหาดทรายทองหวงเต่า","金沙滩"],
+    ["มื้อค่ำอำลา",""] ] },
+  { t:"ช้อปของฝาก · บินกลับ", tag:"ครึ่งวัน", items:[
+    ["ตลาดของฝาก/ห้าง MixC ตามเวลาเที่ยวบิน",""],
+    ["รถส่งสนามบินเจียวตง บินกลับกรุงเทพฯ",""] ] },
+]};
+const INCLUDED = ["ที่พักโรงแรม 4 ดาว 4 คืน (ห้องละ 2 คน)","รถส่วนตัวพร้อมคนขับตลอดโปรแกรม และรับส่งสนามบิน","ไกด์ท้องถิ่น 3 วันเต็ม","ค่าเข้าชมตามโปรแกรม","ค่าอาหารตามที่ประมาณไว้","ประกันการเดินทาง และ eSIM"];
+const EXCLUDED = ["ตั๋วเครื่องบินไป-กลับ (แต่ละคนจ่ายเอง ไม่หาร)","ค่าห้องพักเดี่ยว ถ้าอยากพักคนเดียว","ของฝากและค่าใช้จ่ายส่วนตัว","พาสปอร์ตอายุเหลือไม่น้อยกว่า 6 เดือน","แอป Alipay/WeChat Pay ผูกบัตรไว้ก่อนไป (จีนใช้เงินสดน้อยมาก)"];
+const CATS = { food:["🍜","อาหาร/เครื่องดื่ม"], hotel:["🏨","ที่พัก"], transport:["🚕","เดินทาง"], ticket:["🎫","ตั๋ว/ค่าเข้าชม"], shopping:["🛍️","ช้อปปิ้ง"], other:["💡","อื่นๆ"] };
+
+/* ============== UTIL ============== */
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const baht = v => Math.round(v).toLocaleString("th-TH");
+const money = s => L.fmt(L.fromS(s));           // satang -> "1,234.50"
+const ls = { get(k, d){ try{ const v = localStorage.getItem(k); return v ?? d; }catch(e){ return d; } }, set(k, v){ try{ localStorage.setItem(k, v); }catch(e){} } };
+const todayISO = () => { const d = new Date(); return new Date(d.getTime() - d.getTimezoneOffset()*60000).toISOString().slice(0,10); };
+const setMsgEl = (el, t, cls="") => { el.textContent = t; el.className = "msg " + cls; };
+
+/* ============== STATE ============== */
+let uid = null, rows = [], expenses = [], proposals = [], plan = structuredClone(DEFAULT_PLAN), planLoaded = false;
+let meId = ls.get("ts_me", "");
+let chosenN = null, editingId = null, confirmId = null;
+const members = () => rows.map(r => ({ id:r.id, name:r.name, status:r.status }));
+const nameOf = id => rows.find(r => r.id === id)?.name ?? "(ชื่อที่ถูกลบ)";
+const goCount = () => rows.filter(r => r.status === "go").length;
+const me = () => rows.find(r => r.id === meId) ? meId : "";
+
+/* ============== FIREBASE ============== */
+const app = initializeApp(firebaseConfig);
+const appCheckReady = APP_CHECK.siteKey
+  ? import(`https://www.gstatic.com/firebasejs/${FB_VER}/firebase-app-check.js`).then(m =>
+      m.initializeAppCheck(app, { provider: APP_CHECK.provider === "v3" ? new m.ReCaptchaV3Provider(APP_CHECK.siteKey) : new m.ReCaptchaEnterpriseProvider(APP_CHECK.siteKey), isTokenAutoRefreshEnabled: true })
+    ).catch(e => console.warn("App Check", e))
+  : Promise.resolve();
+const auth = getAuth(app);
+const db = getFirestore(app);
+const tripCol = name => collection(db, "trips", TRIP_ID, name);
+const colSign = tripCol("signups"), colExp = tripCol("expenses"), colProp = tripCol("proposals"), colRcpt = tripCol("receipts");
+const planRef = doc(db, "trips", TRIP_ID, "meta", "plan");
+
+onAuthStateChanged(auth, user => {
+  if (!user) return;
+  uid = user.uid;
+  $("#submitBtn").disabled = false;
+  $("#connStatus").textContent = "อัปเดตสด ใครลงชื่อจะเห็นทันที";
+  onSnapshot(query(colSign, orderBy("createdAt", "asc")), snap => {
+    rows = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    if (!me()) { const mine = rows.find(r => r.owner === uid); meId = mine ? mine.id : ""; }
+    renderAll();
+  }, err => { $("#connStatus").textContent = "โหลดรายชื่อไม่ได้: " + err.code; });
+  onSnapshot(query(colExp, orderBy("createdAt", "desc")), snap => {
+    expenses = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderSplit();
+  }, err => { $("#expEmpty").textContent = "โหลดค่าใช้จ่ายไม่ได้ (" + err.code + ") ผู้ดูแลต้องอัปเดต Firestore rules"; });
+  onSnapshot(query(colProp, orderBy("createdAt", "desc")), snap => {
+    proposals = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderProposals();
+  }, err => { $("#propEmpty").textContent = "โหลดข้อเสนอไม่ได้ (" + err.code + ")"; });
+  onSnapshot(planRef, snap => {
+    if (snap.exists()) {
+      const prevVer = plan.version;
+      try { plan = { ...JSON.parse(snap.data().data), version: snap.data().version }; } catch(e) {}
+      planLoaded = true;
+      renderPlan(planLoaded && prevVer && prevVer !== plan.version);
+      renderProposals();
+    } else {
+      seedPlan();
+    }
+  }, err => console.warn("plan", err));
+});
+signInAnonymously(auth).catch(err => {
+  $("#connStatus").textContent = "เชื่อมต่อไม่ได้ ลองรีเฟรชหน้าอีกครั้ง (" + err.code + ")";
+});
+
+async function seedPlan() {
+  try {
+    await runTransaction(db, async tx => {
+      const s = await tx.get(planRef);
+      if (!s.exists()) tx.set(planRef, { data: JSON.stringify(DEFAULT_PLAN), version: 1, updatedAt: serverTimestamp() });
+    });
+  } catch(e) { console.warn("seed plan", e); }
+}
+
+/* ============== TABS ============== */
+const tabs = $$(".tab");
+function selectTab(id) {
+  tabs.forEach(t => { const on = t.id === id; t.setAttribute("aria-selected", on); document.getElementById(t.getAttribute("aria-controls")).hidden = !on; });
+  try { history.replaceState(null, "", "#" + id.slice(2)); } catch(e) {}
+}
+tabs.forEach(t => t.addEventListener("click", () => selectTab(t.id)));
+{ const h = location.hash.slice(1); if (["signup","plan","split","cost"].includes(h)) selectTab("t-" + h); }
+
+/* ============== SHARE LINK ============== */
+const shareUrl = location.origin + location.pathname;
+$("#shareUrl").textContent = shareUrl;
+async function copyText(text, btn, okLabel) {
+  const old = btn.textContent;
+  try { await navigator.clipboard.writeText(text); btn.textContent = okLabel; }
+  catch(e) { const ta = document.createElement("textarea"); ta.value = text; document.body.appendChild(ta); ta.select();
+    try { document.execCommand("copy"); btn.textContent = okLabel; } catch(_) { btn.textContent = "คัดลอกไม่ได้"; } ta.remove(); }
+  setTimeout(() => btn.textContent = old, 2500);
+}
+$("#copyBtn").addEventListener("click", () => copyText(shareUrl, $("#copyBtn"), "คัดลอกแล้ว"));
+
+/* ============== RENDER ALL ============== */
+function renderAll() {
+  const go = goCount(), maybe = rows.length - go;
+  $("#heroGo").textContent = go; $("#heroMaybe").textContent = maybe;
+  $("#cGo").textContent = go; $("#cMaybe").textContent = maybe;
+  renderSignups(); renderMe(); renderCosts(); renderPlan(); renderProposals(); renderSplit(); renderDraft();
+}
+
+/* ============== SIGN-UP ============== */
+const form = $("#signupForm"), submitBtn = $("#submitBtn"), formMsg = $("#formMsg");
+function renderSignups() {
+  $("#emptyList").hidden = rows.length > 0;
+  $("#peopleList").innerHTML = rows.map(r => {
+    const mine = r.owner === uid;
+    const initial = esc((r.name || "?").trim().charAt(0).toUpperCase());
+    const chip = r.status === "go" ? '<span class="chip go">ไปแน่นอน</span>' : '<span class="chip maybe">ยังไม่แน่ใจ</span>';
+    let actions = chip;
+    if (mine) {
+      const used = expenses.filter(e => e.payer === r.id || e.to === r.id || (e.participants || []).includes(r.id)).length;
+      actions += confirmId === r.id
+        ? `<button class="btn small" data-act="del-yes" data-id="${r.id}">ยืนยันลบ${used ? ` (มีค่าใช้จ่ายผูกอยู่ ${used} รายการ)` : ""}</button><button class="btn ghost small" data-act="del-no">ไม่ลบ</button>`
+        : `<button class="btn ghost small" data-act="edit" data-id="${r.id}">แก้ไข</button><button class="btn ghost small" data-act="del" data-id="${r.id}">ลบ</button>`;
+    }
+    return `<li><span class="avatar" aria-hidden="true">${initial}</span>
+      <span class="who"><b>${esc(r.name)}${mine ? ' <span class="tag">คุณ</span>' : ""}</b>${r.note ? `<small>${esc(r.note)}</small>` : ""}</span>
+      <span class="row-actions">${actions}</span></li>`;
+  }).join("");
+}
+$("#peopleList").addEventListener("click", async e => {
+  const b = e.target.closest("button[data-act]"); if (!b) return;
+  const act = b.dataset.act, id = b.dataset.id;
+  if (act === "del") { confirmId = id; renderSignups(); }
+  else if (act === "del-no") { confirmId = null; renderSignups(); }
+  else if (act === "del-yes") {
+    confirmId = null;
+    try { await deleteDoc(doc(colSign, id)); setMsgEl(formMsg, "ลบชื่อแล้ว", "ok"); if (editingId === id) resetSignup(); }
+    catch (err) { setMsgEl(formMsg, "ลบไม่ได้: " + err.code, "err"); renderSignups(); }
+  } else if (act === "edit") {
+    const r = rows.find(x => x.id === id); if (!r) return;
+    editingId = id;
+    $("#fName").value = r.name; $("#fNote").value = r.note || "";
+    (r.status === "maybe" ? $("#sMaybe") : $("#sGo")).checked = true;
+    submitBtn.textContent = "บันทึกการแก้ไข"; $("#cancelEdit").hidden = false;
+    $("#fName").focus(); setMsgEl(formMsg, "");
+  }
+});
+function resetSignup() { editingId = null; form.reset(); submitBtn.textContent = "ลงชื่อ"; $("#cancelEdit").hidden = true; }
+$("#cancelEdit").addEventListener("click", () => { resetSignup(); setMsgEl(formMsg, ""); });
+form.addEventListener("submit", async e => {
+  e.preventDefault();
+  const name = $("#fName").value.trim(), note = $("#fNote").value.trim();
+  const status = form.querySelector('input[name="status"]:checked').value;
+  if (!name) { setMsgEl(formMsg, "ใส่ชื่อหรือชื่อเล่นก่อนนะ", "err"); $("#fName").focus(); return; }
+  if (!uid) { setMsgEl(formMsg, "ยังเชื่อมต่อไม่เสร็จ รอสักครู่แล้วกดใหม่", "err"); return; }
+  submitBtn.disabled = true;
+  const data = { name, status, note, owner: uid };
+  try {
+    if (editingId) { await updateDoc(doc(colSign, editingId), data); setMsgEl(formMsg, "บันทึกการแก้ไขแล้ว", "ok"); }
+    else {
+      const ref = await addDoc(colSign, { ...data, createdAt: serverTimestamp() });
+      if (!me()) { meId = ref.id; ls.set("ts_me", meId); }
+      setMsgEl(formMsg, `ลงชื่อ "${name}" แล้ว`, "ok");
+    }
+    resetSignup();
+  } catch (err) { setMsgEl(formMsg, "บันทึกไม่สำเร็จ (" + err.code + ") ลองใหม่อีกครั้ง", "err"); }
+  finally { submitBtn.disabled = false; }
+});
+
+/* ============== ME ============== */
+function renderMe() {
+  const opts = `<option value="">— เลือกชื่อของคุณ —</option>` + rows.map(r => `<option value="${r.id}">${esc(r.name)}${r.owner === uid ? " (ลงจากเครื่องนี้)" : ""}</option>`).join("");
+  $$(".meSel").forEach(s => { s.innerHTML = opts; s.value = me(); });
+  $$(".meHint").forEach(h => h.textContent = !rows.length ? "ยังไม่มีใครลงชื่อ ไปที่แท็บ \"ลงชื่อ\" ก่อน"
+    : me() ? "ใช้สำหรับโหวตและเป็นค่าเริ่มต้นของ \"ใครจ่าย\"" : "เลือกชื่อก่อนถึงจะโหวตและบันทึกค่าใช้จ่ายได้");
+}
+document.addEventListener("change", e => {
+  if (e.target.matches(".meSel")) { meId = e.target.value; ls.set("ts_me", meId); renderMe(); renderProposals(); renderSplit(); if (!editingExp) { draft.payer = me() || draft.payer; renderDraft(); } }
+});
+
+/* ============== ESTIMATE ============== */
+$("#incList").innerHTML = INCLUDED.map(x => `<li>${esc(x)}</li>`).join("");
+$("#excList").innerHTML = EXCLUDED.map(x => `<li>${esc(x)}</li>`).join("");
+$("#rateTxt").textContent = RATE;
+function costFor(n) {
+  const shared = TRIP.shared.map(s => ({ ...s, total: s.calc(n) }));
+  const sharedTotal = shared.reduce((a, s) => a + s.total, 0);
+  const personal = TRIP.personal.reduce((a, p) => a + p.thb, 0);
+  const land = Math.round(sharedTotal / n + personal);
+  return { shared, sharedTotal, personal, land, flight: TRIP.flight, total: land + TRIP.flight };
+}
+function renderCosts() {
+  const gc = goCount(), n = chosenN ?? (gc >= 2 ? gc : 5), c = costFor(n);
+  $("#peoplePick").innerHTML = Array.from({ length: 9 }, (_, i) => i + 2).map(k => `<button type="button" data-n="${k}" aria-pressed="${k === n}">${k}</button>`).join("");
+  $("#pickHint").textContent = chosenN == null
+    ? (gc >= 2 ? `ตอนนี้ใช้จำนวนคนที่ลงชื่อ "ไปแน่นอน" = ${gc} คน กดเลือกเพื่อดูกรณีอื่นได้` : `ยังลงชื่อ "ไปแน่นอน" ไม่ถึง 2 คน จึงแสดงกรณีตัวอย่าง 5 คน กดเลือกจำนวนอื่นได้`)
+    : `กำลังแสดงกรณี ${n} คน`;
+  $("#sLand").textContent = baht(c.land) + " ฿";
+  $("#sLandN").textContent = `ส่วนกลาง ${baht(c.sharedTotal / n)} + รายคน ${baht(c.personal)} (${n} คน)`;
+  $("#sFlight").textContent = baht(c.flight) + " ฿";
+  $("#sTotal").textContent = baht(c.total) + " ฿";
+  $("#sTotalN").textContent = `ทั้งกลุ่ม ${n} คน ≈ ${baht(c.total * n)} บาท`;
+  $("#heroPP").textContent = baht(c.total);
+  $("#sharedBody").innerHTML = c.shared.map(s => `<tr><td>${esc(s.name)}<small>${esc(s.detail(n))}</small></td><td class="r num">${baht(s.total)}</td><td class="r num">${baht(s.total / n)}</td></tr>`).join("")
+    + `<tr class="sum"><td>รวมส่วนกลาง</td><td class="r num">${baht(c.sharedTotal)}</td><td class="r num">${baht(c.sharedTotal / n)}</td></tr>`;
+  $("#personalBody").innerHTML = TRIP.personal.map(p => `<tr><td>${esc(p.name)}<small>${esc(p.detail)}</small></td><td class="r num">${baht(p.thb)}</td></tr>`).join("")
+    + `<tr><td>ตั๋วเครื่องบินไป-กลับ<small>แยกจ่ายต่อคน ไม่นำมาหาร</small></td><td class="r num">${baht(TRIP.flight)}</td></tr>`
+    + `<tr class="sum"><td>รวมรายคน (รวมตั๋ว)</td><td class="r num">${baht(c.personal + TRIP.flight)}</td></tr>`;
+}
+$("#peoplePick").addEventListener("click", e => { const b = e.target.closest("button[data-n]"); if (!b) return; chosenN = +b.dataset.n; renderCosts(); });
+
+/* ============== PLAN ============== */
+function renderPlan(flash = false) {
+  $("#planDate").textContent = plan.startDate
+    ? `วันเดินทาง: ${L.thaiDate(plan.startDate)} – ${L.thaiDate(plan.startDate, plan.days.length - 1)}`
+    : "วันเดินทาง: ยังไม่กำหนด (เสนอได้ด้วยการโหวต)";
+  $("#planVer").textContent = `แพลนฉบับที่ ${plan.version || 1}${(plan.version || 1) > 1 ? " · ปรับตามผลโหวต" : ""}`;
+  $("#days").innerHTML = plan.days.map((d, i) => `
+    <div class="day">
+      <div class="dnum">วันที่<b>${i + 1}</b>${plan.startDate ? `<small>${L.thaiDate(plan.startDate, i)}</small>` : ""}</div>
+      <div><h3>${esc(d.t)}${d.tag ? `<span class="tag">${esc(d.tag)}</span>` : ""}</h3>
+        <ul>${d.items.map(([th, zh], k) => `<li>${esc(th)}${zh ? ` <span class="zh">${esc(zh)}</span>` : ""}</li>`).join("")
+          || `<li class="status">ยังว่าง — เสนอเพิ่มที่เที่ยวได้</li>`}</ul>
+        <button class="btn link" type="button" data-act="suggest" data-day="${i}" style="margin-top:4px">เสนอแก้วันนี้</button></div>
+    </div>`).join("");
+  const notes = plan.notes || [];
+  $("#planNotesWrap").hidden = !notes.length;
+  $("#planNotes").innerHTML = notes.map(n => `<li>${esc(n)}</li>`).join("");
+  if (flash) { $("#planCard").classList.remove("flash"); void $("#planCard").offsetWidth; $("#planCard").classList.add("flash"); }
+  fillPropSelects();
+}
+$("#days").addEventListener("click", e => {
+  const b = e.target.closest('[data-act="suggest"]'); if (!b) return;
+  $("#pType").value = "add"; $("#pDay").value = b.dataset.day; fillPropSelects(); syncPropForm();
+  $("#propFormCard").scrollIntoView({ behavior: "smooth", block: "start" });
+  $("#pType").focus({ preventScroll: true });
+});
+
+/* proposal form */
+function fillPropSelects() {
+  const dayOpts = plan.days.map((d, i) => `<option value="${i}">วันที่ ${i + 1} · ${esc(d.t)}</option>`).join("");
+  const dv = $("#pDay").value, tv = $("#pToDay").value, iv = $("#pItem").value;
+  $("#pDay").innerHTML = dayOpts; $("#pToDay").innerHTML = dayOpts;
+  if (dv !== "" && +dv < plan.days.length) $("#pDay").value = dv;
+  if (tv !== "" && +tv < plan.days.length) $("#pToDay").value = tv; else $("#pToDay").value = String(Math.min(1, plan.days.length - 1));
+  const day = plan.days[+$("#pDay").value] || { items: [] };
+  $("#pItem").innerHTML = day.items.map(([th], k) => `<option value="${k}">${esc(th)}</option>`).join("") || `<option value="">(วันนี้ยังไม่มีรายการ)</option>`;
+  if (iv !== "" && +iv < day.items.length) $("#pItem").value = iv;
+}
+function syncPropForm() {
+  const t = $("#pType").value;
+  $$("#propForm [data-show]").forEach(el => el.hidden = !el.dataset.show.split(" ").includes(t));
+  $("#pTextLbl").textContent = t === "other" ? "อยากเปลี่ยนอะไร" : "ชื่อที่เที่ยว / กิจกรรม";
+  $("#pText").placeholder = t === "other" ? "เช่น เปลี่ยนโรงแรมไปอยู่ใกล้ไถตง" : "เช่น ตลาดกลางคืนเถาเลอ";
+}
+$("#pType").addEventListener("change", syncPropForm);
+$("#pDay").addEventListener("change", () => { $("#pItem").value = ""; fillPropSelects(); });
+syncPropForm();
+
+$("#propForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const msg = $("#propMsg");
+  if (!uid) return setMsgEl(msg, "ยังเชื่อมต่อไม่เสร็จ", "err");
+  if (!me()) return setMsgEl(msg, "เลือกชื่อของคุณด้านบนก่อน (ถ้ายังไม่ได้ลงชื่อ ไปที่แท็บ \"ลงชื่อ\")", "err");
+  const type = $("#pType").value, day = +$("#pDay").value, toDay = +$("#pToDay").value;
+  const p = { type, reason: $("#pWhy").value.trim() };
+  if (type === "add") { p.day = day; p.text = $("#pText").value.trim(); p.zh = $("#pZh").value.trim(); if (!p.text) return setMsgEl(msg, "ใส่ชื่อที่เที่ยวก่อน", "err"); }
+  if (type === "remove" || type === "move") {
+    const it = plan.days[day]?.items[+$("#pItem").value]; if (!it) return setMsgEl(msg, "เลือกรายการก่อน", "err");
+    p.day = day; p.text = it[0];
+  }
+  if (type === "move" || type === "swap") { p.day = day; p.toDay = toDay; if (day === toDay) return setMsgEl(msg, "เลือกวันปลายทางที่ต่างจากเดิม", "err"); }
+  if (type === "date") { p.date = $("#pDate").value; if (!p.date) return setMsgEl(msg, "เลือกวันออกเดินทางใหม่", "err"); }
+  if (type === "other") { p.text = $("#pText").value.trim(); if (!p.text) return setMsgEl(msg, "เขียนสิ่งที่อยากเปลี่ยนก่อน", "err"); }
+  try { L.applyProposal(plan, p); } catch (err) { return setMsgEl(msg, err.message, "err"); }
+  $("#propSubmit").disabled = true;
+  try {
+    const ref = await addDoc(colProp, { ...p, owner: uid, by: me(), byName: nameOf(me()), status: "open",
+      votes: { [uid]: { v: 1, who: me(), at: Date.now() } }, createdAt: serverTimestamp(), createdMs: Date.now() });
+    setMsgEl(msg, "ส่งข้อเสนอแล้ว โหวตเห็นด้วยให้อัตโนมัติ 1 เสียง ชวนเพื่อนมาโหวตได้เลย", "ok");
+    $("#pText").value = ""; $("#pZh").value = ""; $("#pWhy").value = "";
+    await tryResolve(ref.id);   // กรณีไปกันคนเดียว/สองคน 1-2 เสียงก็ผ่านได้ทันที
+  } catch (err) { setMsgEl(msg, "ส่งไม่สำเร็จ (" + err.code + ")", "err"); }
+  finally { $("#propSubmit").disabled = false; }
+});
+
+/* proposals list */
+function renderProposals() {
+  const gc = goCount(), need = L.votesNeeded(gc);
+  $("#propRule").textContent = `ทุกคนที่ลงชื่อโหวตได้คนละ 1 เสียง ต้องได้เห็นด้วย ${need} เสียงขึ้นไป (เกินครึ่งของ ${gc || 0} คนที่ "ไปแน่นอน") แพลนจะเปลี่ยนให้อัตโนมัติ ถ้าไม่เห็นด้วยถึง ${need} เสียงข้อเสนอจะตกไป`;
+  const open = L.rankProposals(proposals.filter(p => p.status === "open"));
+  const done = proposals.filter(p => p.status !== "open");
+  $("#propEmpty").hidden = open.length > 0;
+  $("#propDot").hidden = !open.length; $("#propDot").textContent = open.length;
+  $("#propList").innerHTML = open.map((p, i) => propHTML(p, i, need)).join("");
+  $("#histCard").hidden = !done.length;
+  $("#histList").innerHTML = done.map(p => propHTML(p, -1, need)).join("");
+}
+function propHTML(p, i, need) {
+  const t = L.tally(p), vd = L.verdict(p, goCount());
+  const myV = me() ? (Object.values(p.votes || {}).filter(v => v && v.who === me()).sort((a, b) => b.at - a.at)[0]?.v || 0) : 0;
+  const pctU = Math.min(100, t.up.length / need * 100), pctD = Math.min(100 - pctU, t.down.length / need * 100);
+  const names = ids => ids.map(nameOf).map(esc).join(", ");
+  const statusChip = { applied: '<span class="chip go">ปรับแพลนแล้ว</span>', rejected: '<span class="chip no">ตกไป</span>', reverted: '<span class="chip maybe">ย้อนกลับแล้ว</span>' }[p.status] || "";
+  let actions = "";
+  if (p.status === "open") {
+    actions = `<div class="vote">
+      <button class="vbtn up" type="button" data-act="vote" data-v="1" data-id="${p.id}" aria-pressed="${myV > 0}" ${me() ? "" : "disabled"}>👍 เห็นด้วย ${t.up.length}</button>
+      <button class="vbtn down" type="button" data-act="vote" data-v="-1" data-id="${p.id}" aria-pressed="${myV < 0}" ${me() ? "" : "disabled"}>👎 ไม่เห็นด้วย ${t.down.length}</button>
+      <span class="status">ต้องการ ${need} เสียง${vd.state === "pass" ? " · ผ่านแล้ว" : ` · ขาดอีก ${Math.max(0, need - t.up.length)}`}</span>
+      ${vd.state === "pass" ? `<button class="btn small" type="button" data-act="apply" data-id="${p.id}">ปรับแพลนตามนี้</button>` : ""}
+      ${p.owner === uid ? `<button class="btn link" type="button" data-act="withdraw" data-id="${p.id}">ถอนข้อเสนอ</button>` : ""}
+    </div>`;
+  } else if (p.status === "applied" && p.appliedVersion === plan.version && p.prevPlan) {
+    actions = `<div class="btns"><button class="btn link" type="button" data-act="revert" data-id="${p.id}">ย้อนแพลนกลับก่อนข้อนี้</button></div>`;
+  }
+  return `<li class="prop${i === 0 ? " top" : ""}">
+    <div class="head">${i >= 0 ? `<span class="rank">${i === 0 ? "อันดับ 1" : "อันดับ " + (i + 1)}</span>` : statusChip}
+      <span class="title">${esc(L.describeProposal(p, plan))}</span></div>
+    ${p.reason ? `<p class="why">"${esc(p.reason)}"</p>` : ""}
+    ${p.status === "open" ? `<div class="bar" role="img" aria-label="เห็นด้วย ${t.up.length} ไม่เห็นด้วย ${t.down.length} จากที่ต้องการ ${need}"><i class="u" style="width:${pctU}%"></i><i class="d" style="width:${pctD}%"></i></div>` : ""}
+    <div class="voters">เสนอโดย ${esc(p.byName || nameOf(p.by))}${t.up.length ? ` · เห็นด้วย: ${names(t.up)}` : ""}${t.down.length ? ` · ไม่เห็นด้วย: ${names(t.down)}` : ""}${p.result ? ` · ${esc(p.result)}` : ""}</div>
+    ${actions}
+  </li>`;
+}
+async function onPropClick(e) {
+  const b = e.target.closest("button[data-act]"); if (!b) return;
+  const id = b.dataset.id, p = proposals.find(x => x.id === id); if (!p) return;
+  const act = b.dataset.act;
+  try {
+    if (act === "vote") {
+      if (!me()) return;
+      const v = +b.dataset.v, cur = p.votes?.[uid];
+      const same = cur && cur.v === v && cur.who === me();
+      // เอาเสียงเดิมของคนนี้จากเครื่องอื่นออกด้วย ไม่ได้ (แก้ได้เฉพาะของเครื่องตัวเอง) แต่ tally นับเสียงล่าสุดของแต่ละคนอยู่แล้ว
+      b.disabled = true;
+      await updateDoc(doc(colProp, id), { [`votes.${uid}`]: same ? deleteField() : { v, who: me(), at: Date.now() } });
+      await tryResolve(id);
+    } else if (act === "apply") { await tryResolve(id, true); }
+    else if (act === "withdraw") { await deleteDoc(doc(colProp, id)); }
+    else if (act === "revert") { await revert(id); }
+  } catch (err) { alertLine(err.message || err.code); }
+}
+$("#propList").addEventListener("click", onPropClick);
+$("#histList").addEventListener("click", onPropClick);
+function alertLine(t) { setMsgEl($("#propMsg"), t, "err"); }
+
+/** ถ้าผลโหวตถึงเกณฑ์: ผ่าน → ปรับแพลนทันที (transaction กันปรับซ้ำ) / ไม่ผ่าน → ปิดข้อเสนอ */
+async function tryResolve(id, force = false) {
+  const gc = goCount();
+  await runTransaction(db, async tx => {
+    const pRef = doc(colProp, id);
+    const ps = await tx.get(pRef), pls = await tx.get(planRef);
+    if (!ps.exists() || ps.data().status !== "open") return;
+    const p = { id, ...ps.data() }, vd = L.verdict(p, gc);
+    if (vd.state === "fail") { tx.update(pRef, { status: "rejected", result: `ไม่เห็นด้วย ${vd.down.length} เสียง` }); return; }
+    if (vd.state !== "pass" && !force) return;
+    if (vd.state !== "pass") throw new Error("ยังได้เสียงไม่ถึงเกณฑ์");
+    const cur = pls.exists() ? { ...JSON.parse(pls.data().data), version: pls.data().version } : structuredClone(DEFAULT_PLAN);
+    let np;
+    try { np = L.applyProposal(cur, p); }
+    catch (err) { tx.update(pRef, { status: "rejected", result: err.message }); return; }
+    tx.set(planRef, { data: JSON.stringify(np), version: np.version, updatedAt: serverTimestamp() });
+    tx.update(pRef, { status: "applied", appliedAt: serverTimestamp(), appliedVersion: np.version, prevPlan: JSON.stringify(cur),
+      result: `ผ่านด้วยเห็นด้วย ${vd.up.length} เสียง → แพลนฉบับที่ ${np.version}` });
+  });
+}
+async function revert(id) {
+  await runTransaction(db, async tx => {
+    const pRef = doc(colProp, id);
+    const ps = await tx.get(pRef), pls = await tx.get(planRef);
+    const p = ps.data(), curVer = pls.data()?.version;
+    if (!p || p.status !== "applied" || p.appliedVersion !== curVer) throw new Error("แพลนถูกเปลี่ยนต่อไปแล้ว ย้อนข้อนี้ไม่ได้");
+    const prev = JSON.parse(p.prevPlan); prev.version = curVer + 1;
+    tx.set(planRef, { data: JSON.stringify(prev), version: prev.version, updatedAt: serverTimestamp() });
+    tx.update(pRef, { status: "reverted", result: `ย้อนกลับเป็นแพลนฉบับที่ ${prev.version}` });
+  });
+}
+
+/* ============== SPLIT: draft form ============== */
+let editingExp = null;          // expense id being edited
+let draft = newDraft();
+function newDraft() {
+  return { kind: "expense", payer: me(), to: "", participants: null /* null = default go members */, splitMode: "equal",
+    exact: {}, items: [], receipt: null, source: "manual" };
+}
+const draftParticipants = () => draft.participants ?? rows.filter(r => r.status === "go").map(r => r.id);
+function curRate() { return $("input[name=cur]:checked").value === "CNY" ? (parseFloat($("#eRate").value) || DEFAULT_RATE) : 1; }
+function draftDoc() {
+  const currency = $("input[name=cur]:checked").value, amount = parseFloat($("#eAmt").value) || 0, rate = curRate();
+  const thb = L.fromS(L.toS(amount * rate));
+  const d = { kind: draft.kind, currency, amount, rate, thb, payer: $("#ePayer").value };
+  if (draft.kind === "settle") {
+    Object.assign(d, { to: $("#eTo").value, title: `โอนคืน ${nameOf($("#eTo").value)}`, category: "other", participants: [], splitMode: "equal", date: $("#eDate").value || todayISO() });
+  } else {
+    const parts = draftParticipants().filter(id => rows.some(r => r.id === id));
+    Object.assign(d, { title: $("#eTitle").value.trim(), category: $("#eCat").value, date: $("#eDate").value || todayISO(),
+      participants: parts, splitMode: draft.splitMode, note: $("#eNote").value.trim() });
+    if (draft.splitMode === "exact") {
+      const w = {}; let sumOrig = 0;
+      parts.forEach(id => { const v = parseFloat(draft.exact[id]) || 0; w[id] = v; sumOrig += L.toS(v); });
+      d.exactOrigOk = sumOrig === L.toS(amount);
+      d._exactOrigDiff = L.toS(amount) - sumOrig;
+      const al = L.allocate(L.toS(thb), w);
+      d.exact = Object.fromEntries(parts.map(id => [id, L.fromS(al[id] || 0)]));
+    }
+    if (draft.splitMode === "items") d.items = draft.items.map(it => ({ name: it.name || "รายการ", price: parseFloat(it.price) || 0, who: it.who.filter(id => parts.includes(id)) }));
+  }
+  return d;
+}
+$("#eCat").innerHTML = Object.entries(CATS).map(([k, [i, n]]) => `<option value="${k}">${i} ${n}</option>`).join("");
+$("#eRate").value = ls.get("ts_rate", DEFAULT_RATE);
+$("#eDate").value = todayISO();
+
+function renderDraft() {
+  const ms = members();
+  const kind = draft.kind;
+  $$("#expForm [data-kind]").forEach(el => el.hidden = el.dataset.kind !== kind);
+  $("#payerLbl").textContent = kind === "settle" ? "ใครโอน" : "ใครจ่าย";
+  const pOpts = `<option value="">— เลือก —</option>` + ms.map(m => `<option value="${m.id}">${esc(m.name)}</option>`).join("");
+  $("#ePayer").innerHTML = pOpts; $("#ePayer").value = ms.some(m => m.id === draft.payer) ? draft.payer : "";
+  $("#eTo").innerHTML = pOpts; $("#eTo").value = ms.some(m => m.id === draft.to) ? draft.to : "";
+  const parts = draftParticipants();
+  $("#partPicks").innerHTML = ms.map(m => `<button type="button" class="pk" data-act="part" data-id="${m.id}" aria-pressed="${parts.includes(m.id)}">${esc(m.name)}${m.status === "maybe" ? " ?" : ""}</button>`).join("") || `<span class="status">ยังไม่มีรายชื่อ</span>`;
+  $("#partCount").textContent = parts.length ? `(${parts.filter(id => ms.some(m => m.id === id)).length} คน)` : "";
+  $("#rateRow").hidden = $("input[name=cur]:checked").value !== "CNY";
+  const mode = kind === "expense" ? draft.splitMode : "equal";
+  $("#exactBox").hidden = mode !== "exact"; $("#itemsBox").hidden = mode !== "items";
+  const cur = $("input[name=cur]:checked").value === "CNY" ? "¥" : "฿";
+  if (mode === "exact") {
+    $("#exactBox").innerHTML = parts.map(id => `<div class="exact-row"><span>${esc(nameOf(id))}</span>
+      <input type="number" inputmode="decimal" step="0.01" min="0" data-exact="${id}" value="${draft.exact[id] ?? ""}" placeholder="0.00 ${cur}" aria-label="ยอดของ ${esc(nameOf(id))}"></div>`).join("")
+      + `<div class="btns"><span class="status" id="exactLeft"></span><button class="btn link" type="button" data-act="exact-rest">หารส่วนที่เหลือเท่าๆ กัน</button></div>`;
+  }
+  if (mode === "items") {
+    $("#itemsBox").innerHTML = (draft.items.map((it, k) => `<div class="item-row">
+        <div class="top"><input type="text" data-item="${k}" data-f="name" value="${esc(it.name)}" placeholder="ชื่อรายการ" aria-label="ชื่อรายการ">
+        <input type="number" inputmode="decimal" step="0.01" data-item="${k}" data-f="price" value="${it.price ?? ""}" placeholder="ราคา ${cur}" aria-label="ราคา">
+        <button type="button" data-act="item-del" data-k="${k}" aria-label="ลบรายการ">✕</button></div>
+        <div class="picks">${parts.map(id => `<button type="button" class="pk sm" data-act="item-who" data-k="${k}" data-id="${id}" aria-pressed="${it.who.includes(id)}">${esc(nameOf(id))}</button>`).join("")}
+        <span class="status">${it.who.length ? "" : "ไม่เลือก = หารทุกคนที่ร่วมบิล"}</span></div></div>`).join("")
+      || `<span class="status">ยังไม่มีรายการ ให้ AI อ่านจากบิล หรือเพิ่มเอง</span>`)
+      + `<div class="btns"><button class="btn ghost small" type="button" data-act="item-add">+ เพิ่มรายการ</button><span class="status" id="itemsLeft"></span></div>`;
+  }
+  updatePreview();
+}
+function updatePreview() {
+  const d = draftDoc();
+  $("#thbOut").textContent = d.currency === "CNY" ? `= ${L.fmt(d.thb)} บาท` : "";
+  const cur = d.currency === "CNY" ? "¥" : "฿";
+  if (draft.kind === "expense" && draft.splitMode === "exact" && $("#exactLeft")) {
+    const diff = L.fromS(d._exactOrigDiff || 0);
+    $("#exactLeft").textContent = diff === 0 ? "ยอดครบพอดี" : diff > 0 ? `ยังขาดอีก ${L.fmt(diff)} ${cur}` : `เกินมา ${L.fmt(-diff)} ${cur}`;
+  }
+  if (draft.kind === "expense" && draft.splitMode === "items" && $("#itemsLeft")) {
+    const s = draft.items.reduce((a, it) => a + L.toS(parseFloat(it.price) || 0), 0), extra = L.toS(d.amount) - s;
+    $("#itemsLeft").textContent = `รวมรายการ ${L.fmt(L.fromS(s))} ${cur}` + (extra ? ` · ส่วนต่าง ${L.fmt(L.fromS(extra))} ${cur} (ค่าบริการ/VAT/ส่วนลด) เฉลี่ยตามสัดส่วนที่สั่ง` : "");
+  }
+  if (!(d.thb > 0)) { $("#preview").innerHTML = "<span>ใส่จำนวนเงินก่อน</span>"; return; }
+  const sh = L.sharesOf(d);
+  const ids = Object.keys(sh).filter(id => sh[id]);
+  $("#preview").innerHTML = ids.length
+    ? ids.map(id => `<span>${esc(nameOf(id))} <b class="num">${money(sh[id])}</b> ฿</span>`).join("")
+    : "<span>เลือกคนที่หารก่อน</span>";
+}
+$("#expForm").addEventListener("click", e => {
+  const b = e.target.closest("button[data-act]"); if (!b) return;
+  const act = b.dataset.act, ms = members();
+  if (act === "part") { const s = new Set(draftParticipants()); s.has(b.dataset.id) ? s.delete(b.dataset.id) : s.add(b.dataset.id); draft.participants = [...s]; }
+  else if (act === "p-go") draft.participants = ms.filter(m => m.status === "go").map(m => m.id);
+  else if (act === "p-all") draft.participants = ms.map(m => m.id);
+  else if (act === "p-payer") { const p = $("#ePayer").value; draft.participants = p ? [p] : []; }
+  else if (act === "exact-rest") {
+    const parts = draftParticipants(), amt = parseFloat($("#eAmt").value) || 0;
+    const filled = parts.filter(id => draft.exact[id] !== undefined && draft.exact[id] !== "");
+    const empty = parts.filter(id => !filled.includes(id));
+    const rest = L.toS(amt) - filled.reduce((a, id) => a + L.toS(draft.exact[id]), 0);
+    const target = empty.length ? empty : parts;
+    const base = empty.length ? {} : Object.fromEntries(parts.map(id => [id, L.toS(draft.exact[id])]));
+    const al = L.splitEqual(rest, target);
+    target.forEach(id => draft.exact[id] = L.fromS((base[id] || 0) + al[id]));
+  }
+  else if (act === "item-add") draft.items.push({ name: "", price: "", who: [] });
+  else if (act === "item-del") draft.items.splice(+b.dataset.k, 1);
+  else if (act === "item-who") { const it = draft.items[+b.dataset.k]; const i = it.who.indexOf(b.dataset.id); i >= 0 ? it.who.splice(i, 1) : it.who.push(b.dataset.id); }
+  else return;
+  renderDraft();
+});
+$("#expForm").addEventListener("input", e => {
+  const t = e.target;
+  if (t.dataset.exact) draft.exact[t.dataset.exact] = t.value;
+  if (t.dataset.item) draft.items[+t.dataset.item][t.dataset.f] = t.value;
+  if (t.id === "eRate") ls.set("ts_rate", t.value);
+  updatePreview();
+});
+$("#expForm").addEventListener("change", e => {
+  const t = e.target;
+  if (t.name === "kind") draft.kind = t.value;
+  else if (t.name === "mode") { draft.splitMode = t.value; if (t.value === "items" && !draft.items.length) draft.items.push({ name: "", price: "", who: [] }); }
+  else if (t.id === "ePayer") draft.payer = t.value;
+  else if (t.id === "eTo") draft.to = t.value;
+  else if (t.name !== "cur") return;
+  renderDraft();
+});
+function setRadio(name, v) { const el = $(`input[name=${name}][value="${v}"]`); if (el) el.checked = true; }
+function resetExpForm(keepMsg) {
+  editingExp = null; draft = newDraft();
+  $("#eTitle").value = ""; $("#eAmt").value = ""; $("#eNote").value = ""; $("#eDate").value = todayISO(); $("#eCat").value = "food";
+  setRadio("kind", "expense"); setRadio("mode", "equal"); setRadio("cur", "THB");
+  $("#rcptPrev").hidden = true; $("#rcptPrev").removeAttribute("src");
+  $("#expFormTitle").textContent = "เพิ่มค่าใช้จ่าย"; $("#expSave").textContent = "บันทึก";
+  if (!keepMsg) { setMsgEl($("#expMsg"), ""); setMsgEl($("#aiMsg"), ""); }
+  renderDraft();
+}
+$("#expReset").addEventListener("click", () => resetExpForm());
+
+$("#expForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const msg = $("#expMsg");
+  if (!uid) return setMsgEl(msg, "ยังเชื่อมต่อไม่เสร็จ", "err");
+  if (!me()) return setMsgEl(msg, "เลือกชื่อของคุณด้านบนก่อน", "err");
+  const d = draftDoc();
+  if (d.kind === "expense" && !d.title) d.title = CATS[d.category][1];
+  if (d.kind === "expense" && d.splitMode === "exact" && !d.exactOrigOk) {
+    const diff = L.fromS(d._exactOrigDiff); return setMsgEl(msg, `ยอดที่กำหนดเองยัง${diff > 0 ? "ขาด" : "เกิน"} ${L.fmt(Math.abs(diff))} กด "หารส่วนที่เหลือเท่าๆ กัน" ได้`, "err");
+  }
+  delete d.exactOrigOk; delete d._exactOrigDiff;
+  const err = L.validateExpense(d); if (err) return setMsgEl(msg, err, "err");
+  d.hasReceipt = !!draft.receipt || (editingExp ? !!expenses.find(x => x.id === editingExp)?.hasReceipt : false);
+  d.source = draft.source;
+  $("#expSave").disabled = true;
+  try {
+    let id = editingExp;
+    if (id) await updateDoc(doc(colExp, id), { ...d, editedAt: serverTimestamp() });
+    else { const ref = await addDoc(colExp, { ...d, owner: uid, by: me(), createdAt: serverTimestamp() }); id = ref.id; }
+    if (draft.receipt?.thumb) await setDoc(doc(colRcpt, id), { img: draft.receipt.thumb, owner: uid, createdAt: serverTimestamp() });
+    const wasEdit = !!editingExp;
+    resetExpForm(true);
+    setMsgEl(msg, wasEdit ? "บันทึกการแก้ไขแล้ว" : `บันทึก "${d.title}" ${L.fmt(d.thb)} บาทแล้ว`, "ok");
+  } catch (err2) { setMsgEl(msg, "บันทึกไม่สำเร็จ (" + (err2.code || err2.message) + ")", "err"); }
+  finally { $("#expSave").disabled = false; }
+});
+
+/* ============== AI: read bill / slip / ticket ============== */
+$("#camBtn").addEventListener("click", () => $("#fileCam").click());
+$("#pickBtn").addEventListener("click", () => $("#fileAny").click());
+["#fileCam", "#fileAny"].forEach(s => $(s).addEventListener("change", e => { const f = e.target.files[0]; e.target.value = ""; if (f) scanFile(f); }));
+const scanBox = $("#scanBox");
+scanBox.addEventListener("dragover", e => { e.preventDefault(); scanBox.classList.add("drag"); });
+scanBox.addEventListener("dragleave", () => scanBox.classList.remove("drag"));
+scanBox.addEventListener("drop", e => { e.preventDefault(); scanBox.classList.remove("drag"); const f = e.dataTransfer.files[0]; if (f) scanFile(f); });
+
+function loadImage(file) {
+  return new Promise((res, rej) => { const url = URL.createObjectURL(file), img = new Image();
+    img.onload = () => { URL.revokeObjectURL(url); res(img); }; img.onerror = () => { URL.revokeObjectURL(url); rej(new Error("เปิดรูปไม่ได้")); }; img.src = url; });
+}
+function toJpeg(img, maxSide, q) {
+  const s = Math.min(1, maxSide / Math.max(img.naturalWidth, img.naturalHeight));
+  const c = document.createElement("canvas"); c.width = Math.round(img.naturalWidth * s); c.height = Math.round(img.naturalHeight * s);
+  const g = c.getContext("2d"); g.fillStyle = "#fff"; g.fillRect(0, 0, c.width, c.height); g.drawImage(img, 0, 0, c.width, c.height);
+  return c.toDataURL("image/jpeg", q);
+}
+const fileB64 = f => new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(String(r.result).split(",")[1]); r.onerror = rej; r.readAsDataURL(f); });
+
+let aiModelPromise = null;
+function getModel() {
+  return aiModelPromise ||= (async () => {
+    await appCheckReady;
+    const m = await import(`https://www.gstatic.com/firebasejs/${FB_VER}/firebase-ai.js`);
+    const S = m.Schema;
+    const schema = S.object({
+      properties: {
+        docType: S.enumString({ enum: ["receipt", "transfer_slip", "ticket", "other"] }),
+        title: S.string({ description: "ชื่อร้าน/สิ่งที่จ่าย สั้นๆ เป็นภาษาไทย เช่น 'ซีฟู้ด ร้านหยุนเซียว', 'ตั๋วเครื่องบิน BKK-TAO', 'แท็กซี่ไปสนามบิน'" }),
+        date: S.string({ description: "วันที่ในเอกสาร รูปแบบ YYYY-MM-DD (ค.ศ.) ถ้าไม่มีให้เป็นค่าว่าง" }),
+        currency: S.enumString({ enum: ["THB", "CNY", "OTHER"] }),
+        total: S.number({ description: "ยอดรวมที่จ่ายจริงสุทธิ (หลังส่วนลด รวม VAT/ค่าบริการ)" }),
+        category: S.enumString({ enum: ["food", "hotel", "transport", "ticket", "shopping", "other"] }),
+        items: S.array({ items: S.object({ properties: { name: S.string({ description: "ชื่อรายการ แปลเป็นไทยสั้นๆ ถ้าเป็นภาษาจีน ใส่ชื่อจีนในวงเล็บ" }), price: S.number({ description: "ราคารวมของบรรทัดนั้น (จำนวน × ราคาต่อหน่วย)" }) } }) }),
+        fromName: S.string({ description: "ชื่อผู้โอน/ผู้จ่าย/ชื่อผู้โดยสารในเอกสาร ถ้ามี" }),
+        toName: S.string({ description: "ชื่อผู้รับโอน ถ้าเป็นสลิปโอนเงิน" }),
+        note: S.string({ description: "ข้อสังเกตสั้นๆ เช่น 'รวมค่าบริการ 10%' หรือ 'ตั๋ว 2 ใบ'" }),
+      },
+      optionalProperties: ["items", "fromName", "toName", "note", "date"],
+    });
+    // useLimitedUseAppCheckTokens: ต้องเปิดเมื่อ App Check ของ AI Logic ตั้ง "Replay - Enforced" (ใช้ token ใหม่ทุกครั้ง)
+    const ai = m.getAI(app, { backend: new m.GoogleAIBackend(), useLimitedUseAppCheckTokens: !!APP_CHECK.siteKey });
+    return AI_MODELS.map(name => m.getGenerativeModel(ai, { model: name, generationConfig: { responseMimeType: "application/json", responseSchema: schema } }, { timeout: AI_TIMEOUT_MS }));
+  })();
+}
+const retryable = err => /fetch-error|timeout|abort|high demand|overloaded|unavailable|RESOURCE_EXHAUSTED|\b(429|500|502|503|504)\b/i.test(String(err?.code || "") + " " + String(err?.message || err));
+async function askAI(parts, onFallback) {
+  const models = await getModel();
+  let lastErr;
+  for (let i = 0; i < models.length; i++) {
+    try { return await models[i].generateContent(parts); }
+    catch (err) {
+      lastErr = err; console.warn("AI model", AI_MODELS[i], err);
+      if (!retryable(err) || i === models.length - 1) throw err;
+      onFallback?.();
+    }
+  }
+  throw lastErr;
+}
+function aiErrorText(err) {
+  const s = String(err?.code || "") + " " + String(err?.message || err);
+  if (/api-not-enabled|firebasevertexai|not been used|PERMISSION_DENIED/i.test(s)) return "ยังไม่ได้เปิดใช้ AI ในโปรเจกต์ Firebase นี้ (ผู้ดูแลเว็บต้องกด Get started ที่เมนู AI Logic ครั้งเดียว) ระหว่างนี้กรอกเองได้เลย";
+  if (/app-?check|unauthenticated|401|403/i.test(s)) return "ยืนยันตัวตนกับ AI ไม่ผ่าน (App Check) ลองรีเฟรชหน้าแล้วกดอ่านใหม่ ถ้ายังไม่ได้ให้ปิดตัวบล็อกโฆษณาในเบราว์เซอร์ หรือกรอกเองได้เลย";
+  if (/quota|429|RESOURCE_EXHAUSTED/i.test(s)) return "AI ใช้งานเกินโควตาฟรีของวันนี้ ลองใหม่ภายหลัง หรือกรอกเอง";
+  if (/high demand|overloaded|unavailable|timeout|\b50[0-4]\b/i.test(s)) return "AI ของ Google คนใช้เยอะมากตอนนี้ ลองกดอ่านใหม่อีกครั้งในอีกสักครู่ หรือกรอกเองได้เลย";
+  if (/fetch|network|Failed to/i.test(s)) return "เชื่อมต่อ AI ไม่ได้ ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่";
+  return "AI อ่านไม่สำเร็จ (" + s.trim().slice(0, 120) + ") กรอกเองได้เลย";
+}
+async function scanFile(file) {
+  const msg = $("#aiMsg");
+  const isPdf = file.type === "application/pdf", isImg = file.type.startsWith("image/");
+  if (!isPdf && !isImg) return setMsgEl(msg, "รองรับเฉพาะรูปภาพหรือ PDF", "err");
+  if (file.size > 15 * 1024 * 1024) return setMsgEl(msg, "ไฟล์ใหญ่เกิน 15 MB", "err");
+  msg.className = "msg"; msg.innerHTML = '<span class="spin" aria-hidden="true"></span>AI กำลังอ่าน…';
+  $("#camBtn").disabled = $("#pickBtn").disabled = true;
+  try {
+    let part, thumb = null;
+    if (isImg) {
+      const img = await loadImage(file);
+      const big = toJpeg(img, 1600, 0.85); thumb = toJpeg(img, 900, 0.6);
+      part = { inlineData: { mimeType: "image/jpeg", data: big.split(",")[1] } };
+      $("#rcptPrev").src = thumb; $("#rcptPrev").hidden = false;
+    } else {
+      part = { inlineData: { mimeType: "application/pdf", data: await fileB64(file) } };
+      $("#rcptPrev").hidden = true;
+    }
+    draft.receipt = { thumb };
+    const names = members().map(m => m.name).join(", ") || "-";
+    const prompt = `อ่านเอกสารการเงินในไฟล์นี้ (ใบเสร็จ/บิลร้านอาหาร/สลิปโอนเงินธนาคารหรือ Alipay/WeChat/ตั๋วเครื่องบิน รถไฟ ค่าเข้าชม) ของทริปเที่ยวชิงเต่า ประเทศจีน
+- total = ยอดที่จ่ายจริงสุทธิ, currency: ¥ / 元 / RMB = CNY, ฿ / บาท = THB
+- items = รายการสินค้า/อาหารแต่ละบรรทัด (ถ้ามี) price = ราคารวมของบรรทัดนั้น ไม่ต้องใส่บรรทัดยอดรวม ภาษี ค่าบริการ หรือส่วนลด
+- ถ้าเป็นสลิปโอนเงินระหว่างเพื่อน ให้ docType = transfer_slip และใส่ fromName, toName ตามที่เห็น
+- ชื่อคนในทริป (ใช้จับคู่ชื่อ): ${names}
+- วันนี้คือ ${todayISO()} ถ้าวันที่เป็น พ.ศ. ให้แปลงเป็น ค.ศ.
+ถ้าอ่านตัวเลขไม่ชัดให้เดาใกล้เคียงที่สุดและบอกใน note`;
+    const r = await askAI([prompt, part], () => { msg.innerHTML = '<span class="spin" aria-hidden="true"></span>AI ตัวหลักคนใช้เยอะ กำลังสลับไปตัวสำรอง…'; });
+    const j = JSON.parse(r.response.text());
+    applyAI(j);
+  } catch (err) {
+    console.warn(err);
+    setMsgEl(msg, aiErrorText(err), "err");
+  } finally { $("#camBtn").disabled = $("#pickBtn").disabled = false; }
+}
+function applyAI(j) {
+  const ms = members();
+  draft.source = "ai";
+  const fromId = L.matchName(j.fromName, ms), toId = L.matchName(j.toName, ms);
+  const isSettle = j.docType === "transfer_slip" && fromId && toId && fromId !== toId;
+  draft.kind = isSettle ? "settle" : "expense"; setRadio("kind", draft.kind);
+  if (j.total > 0) $("#eAmt").value = Math.round(j.total * 100) / 100;
+  setRadio("cur", j.currency === "CNY" ? "CNY" : "THB");
+  if (j.date && /^\d{4}-\d{2}-\d{2}$/.test(j.date)) $("#eDate").value = j.date;
+  if (isSettle) { draft.payer = fromId; draft.to = toId; }
+  else {
+    $("#eTitle").value = (j.title || "").slice(0, 80);
+    if (CATS[j.category]) $("#eCat").value = j.category;
+    draft.payer = (j.docType === "transfer_slip" || j.docType === "ticket") && fromId ? fromId : (me() || draft.payer);
+    draft.items = (j.items || []).filter(it => it && it.name).slice(0, 40).map(it => ({ name: String(it.name).slice(0, 80), price: Math.round((+it.price || 0) * 100) / 100, who: [] }));
+    $("#eNote").value = (j.note || "").slice(0, 200);
+  }
+  renderDraft();
+  const cur = j.currency === "CNY" ? "หยวน" : j.currency === "OTHER" ? "(สกุลเงินอื่น ตรวจสอบด้วย)" : "บาท";
+  const itemsTxt = draft.items.length > 1 ? ` · พบ ${draft.items.length} รายการ ถ้าแต่ละคนสั่งไม่เหมือนกันเลือก "หารตามรายการที่สั่ง"` : "";
+  setMsgEl($("#aiMsg"), isSettle
+    ? `AI อ่านเป็นสลิปโอนคืน: ${nameOf(fromId)} → ${nameOf(toId)} ${L.fmt(j.total)} ${cur} ตรวจแล้วกดบันทึก`
+    : `AI อ่านได้ ${L.fmt(j.total || 0)} ${cur}${itemsTxt} ตรวจแล้วเลือกคนที่หาร จากนั้นกดบันทึก`, "ok");
+  $("#expForm").scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+/* ============== SPLIT: summary & list ============== */
+function renderSplit() {
+  const ms = members(), bal = L.balances(expenses, ms.map(m => m.id));
+  const total = expenses.filter(e => e.kind !== "settle").reduce((a, e) => a + L.toS(e.thb), 0);
+  const nExp = expenses.filter(e => e.kind !== "settle").length;
+  $("#tTotal").textContent = money(total) + " ฿";
+  $("#tTotalN").textContent = nExp ? `${nExp} รายการ · เฉลี่ย ${money(Math.round(total / Math.max(1, Object.values(bal).filter(b => b.owed > 0).length)))} ฿/คน ที่ร่วมหาร` : "ยังไม่มีรายการ";
+  $("#heroSpentPill").hidden = !total; $("#heroSpent").textContent = baht(L.fromS(total));
+  const mb = me() && bal[me()];
+  const tile = $("#tNetTile");
+  tile.className = "tile" + (mb ? (mb.net > 0 ? " pos" : mb.net < 0 ? " neg" : "") : " total");
+  if (mb) {
+    const myShare = expenses.filter(e => e.kind !== "settle").reduce((a, e) => a + (L.sharesOf(e)[me()] || 0), 0);
+    $("#tPaid").textContent = money(expenses.filter(e => e.kind !== "settle" && e.payer === me()).reduce((a, e) => a + L.toS(e.thb), 0)) + " ฿";
+    $("#tPaidN").textContent = `ส่วนของคุณเอง ${money(myShare)} ฿`;
+    $("#tNetK").textContent = mb.net > 0 ? "คุณได้เงินคืน" : mb.net < 0 ? "คุณต้องจ่ายเพิ่ม" : "ยอดของคุณ";
+    $("#tNet").textContent = (mb.net ? money(Math.abs(mb.net)) : "0") + " ฿";
+    $("#tNetN").textContent = mb.net === 0 ? "เคลียร์ครบแล้ว" : "รวมยอดที่โอนคืนกันแล้ว ดูว่าต้องโอนให้ใครด้านล่าง";
+  } else { $("#tPaid").textContent = "–"; $("#tPaidN").textContent = "เลือกชื่อคุณด้านบน"; $("#tNetK").textContent = "ยอดสุทธิของคุณ"; $("#tNet").textContent = "–"; $("#tNetN").textContent = "เลือกชื่อคุณด้านบนก่อน"; }
+
+  // balance table
+  const ids = Object.keys(bal).sort((a, b) => ms.findIndex(m => m.id === a) - ms.findIndex(m => m.id === b));
+  $("#balBody").innerHTML = ids.map(id => {
+    const b = bal[id], open = openPerson === id;
+    return `<tr class="clickable" data-person="${id}" aria-expanded="${open}"><td><b>${esc(nameOf(id))}</b>${id === me() ? ' <span class="tag">คุณ</span>' : ""}</td>
+      <td class="r num">${money(b.paid)}</td><td class="r num">${money(b.owed)}</td>
+      <td class="r num ${b.net > 0 ? "pos" : b.net < 0 ? "neg" : ""}">${b.net > 0 ? "+" : ""}${money(b.net)}</td></tr>`
+      + (open ? `<tr class="detail"><td colspan="4">${personDetail(id)}</td></tr>` : "");
+  }).join("") + (ids.length ? `<tr class="sum"><td>รวม</td><td class="r num">${money(ids.reduce((a, id) => a + bal[id].paid, 0))}</td><td class="r num">${money(ids.reduce((a, id) => a + bal[id].owed, 0))}</td><td></td></tr>` : "");
+
+  // settle
+  const tr = L.settleUp(bal);
+  $("#settleList").innerHTML = tr.length ? tr.map((t, i) => `<li><span class="txt"><b>${esc(nameOf(t.from))}</b> โอนให้ <b>${esc(nameOf(t.to))}</b> <b class="num">${money(t.amount)}</b> ฿</span>
+      <button class="btn ghost small" type="button" data-act="paid" data-i="${i}" ${me() ? "" : "disabled"}>บันทึกว่าโอนแล้ว</button></li>`).join("")
+    : `<li><span class="txt status">${nExp ? "ทุกคนเคลียร์ยอดกันครบแล้ว" : "ยังไม่มีอะไรต้องโอน"}</span></li>`;
+  $("#settleList").onclick = async e => {
+    const b = e.target.closest('[data-act="paid"]'); if (!b) return;
+    const t = tr[+b.dataset.i]; b.disabled = true;
+    try { await addDoc(colExp, { kind: "settle", payer: t.from, to: t.to, thb: L.fromS(t.amount), amount: L.fromS(t.amount), currency: "THB", rate: 1,
+      title: `โอนคืน ${nameOf(t.to)}`, category: "other", participants: [], splitMode: "equal", date: todayISO(), owner: uid, by: me(), source: "settle", createdAt: serverTimestamp() }); }
+    catch (err) { setMsgEl($("#sumMsg"), "บันทึกไม่สำเร็จ (" + err.code + ")", "err"); b.disabled = false; }
+  };
+
+  // filter + list
+  const fv = $("#fltWho").value;
+  $("#fltWho").innerHTML = `<option value="">ทุกคน</option>` + ms.map(m => `<option value="${m.id}">เฉพาะ ${esc(m.name)}</option>`).join("");
+  $("#fltWho").value = ms.some(m => m.id === fv) ? fv : "";
+  const flt = $("#fltWho").value;
+  const list = expenses.filter(e => !flt || e.payer === flt || e.to === flt || (L.sharesOf(e)[flt] || 0) !== 0)
+    .sort((a, b) => (b.date || "").localeCompare(a.date || "") || (b.createdAt?.seconds || 9e12) - (a.createdAt?.seconds || 9e12));
+  $("#expEmpty").hidden = list.length > 0;
+  let lastDate = null;
+  $("#expList").innerHTML = list.map(e => {
+    const sep = e.date !== lastDate ? `<div class="daysep">${e.date ? L.thaiDate(e.date) : "ไม่ระบุวันที่"}</div>` : ""; lastDate = e.date;
+    return sep + expHTML(e, flt);
+  }).join("");
+  renderSignups();
+}
+let openPerson = null;
+$("#balBody").addEventListener("click", e => { const r = e.target.closest("tr[data-person]"); if (!r) return; openPerson = openPerson === r.dataset.person ? null : r.dataset.person; renderSplit(); });
+function personDetail(id) {
+  const rowsH = expenses.map(e => {
+    const sh = L.sharesOf(e)[id] || 0, paid = e.payer === id ? L.toS(e.thb) : 0;
+    if (!sh && !paid) return "";
+    const label = e.kind === "settle" ? (e.payer === id ? `โอนคืนให้ ${nameOf(e.to)}` : `ได้รับโอนคืนจาก ${nameOf(e.payer)}`) : e.title;
+    return `<tr><td>${esc(label)}<small>${e.date ? L.thaiDate(e.date) : ""}</small></td><td class="r num">${paid ? money(paid) : "–"}</td><td class="r num">${sh ? money(sh) : "–"}</td></tr>`;
+  }).join("");
+  return rowsH ? `<table><thead><tr><th>รายการ</th><th class="r">จ่าย</th><th class="r">ส่วนของ ${esc(nameOf(id))}</th></tr></thead><tbody>${rowsH}</tbody></table>` : "ยังไม่มีรายการของคนนี้";
+}
+function expHTML(e, flt) {
+  const [ico] = e.kind === "settle" ? ["🔁"] : (CATS[e.category] || CATS.other);
+  const sh = L.sharesOf(e), who = flt || me();
+  const orig = e.currency === "CNY" ? `<small>¥${L.fmt(e.amount)} @${e.rate}</small>` : "";
+  const mine = who && sh[who] ? `<small class="mine">ส่วน${flt ? "ของ " + esc(nameOf(who)) : "คุณ"} ${money(sh[who])}</small>` : "";
+  const sub = e.kind === "settle" ? `${esc(nameOf(e.payer))} → ${esc(nameOf(e.to))}`
+    : `${esc(nameOf(e.payer))} จ่าย · ${{ equal: "หารเท่ากัน", exact: "กำหนดเอง", items: "ตามรายการ" }[e.splitMode] || ""} ${Object.keys(sh).filter(k => sh[k]).length} คน${e.source === "ai" ? " · อ่านด้วย AI" : ""}`;
+  const shRows = Object.entries(sh).filter(([, v]) => v).map(([id, v]) => `<tr><td>${esc(nameOf(id))}</td><td class="r num">${money(v)} ฿</td></tr>`).join("");
+  const items = e.splitMode === "items" && e.items?.length ? `<div class="status">รายการ: ${e.items.map(it => `${esc(it.name)} ${L.fmt(it.price)}${it.who?.length ? ` (${it.who.map(nameOf).map(esc).join(", ")})` : ""}`).join(" · ")}</div>` : "";
+  const canEdit = e.owner === uid;
+  return `<details class="exp" data-id="${e.id}"><summary><span class="ico" aria-hidden="true">${ico}</span>
+      <span class="who"><b>${esc(e.title)}</b><small>${sub}</small></span>
+      <span class="amt"><b>${money(L.toS(e.thb))} ฿</b>${orig}${mine}</span></summary>
+    <div class="exp-body">
+      ${e.kind !== "settle" ? `<table><tbody>${shRows}</tbody></table>` : ""}
+      ${items}${e.note ? `<div class="status">หมายเหตุ: ${esc(e.note)}</div>` : ""}
+      <div class="rimg"></div>
+      <div class="btns">
+        ${e.hasReceipt ? `<button class="btn ghost small" type="button" data-act="rcpt" data-id="${e.id}">ดูรูปบิล</button>` : ""}
+        ${canEdit ? `<button class="btn ghost small" type="button" data-act="edit" data-id="${e.id}">แก้ไข</button>
+        <button class="btn ghost small" type="button" data-act="del" data-id="${e.id}">ลบ</button>` : `<span class="status">แก้ไข/ลบได้จากเครื่องที่บันทึก</span>`}
+      </div>
+    </div></details>`;
+}
+$("#fltWho").addEventListener("change", renderSplit);
+$("#expList").addEventListener("click", async ev => {
+  const b = ev.target.closest("button[data-act]"); if (!b) return;
+  const id = b.dataset.id, e = expenses.find(x => x.id === id); if (!e) return;
+  const act = b.dataset.act;
+  if (act === "rcpt") {
+    const box = b.closest(".exp-body").querySelector(".rimg");
+    box.textContent = "กำลังโหลด…";
+    try { const s = await getDoc(doc(colRcpt, id)); box.innerHTML = s.exists() ? `<img class="rcpt" src="${esc(s.data().img)}" alt="รูปบิล ${esc(e.title)}">` : "ไม่พบรูป"; }
+    catch (err) { box.textContent = "โหลดรูปไม่ได้ (" + err.code + ")"; }
+  } else if (act === "del") {
+    if (b.dataset.confirm !== "1") { b.dataset.confirm = "1"; b.textContent = "กดอีกครั้งเพื่อยืนยันลบ"; b.classList.remove("ghost"); return; }
+    try { await deleteDoc(doc(colExp, id)); if (e.hasReceipt) deleteDoc(doc(colRcpt, id)).catch(() => {}); }
+    catch (err) { setMsgEl($("#sumMsg"), "ลบไม่ได้ (" + err.code + ")", "err"); }
+  } else if (act === "edit") {
+    editingExp = id;
+    draft = { kind: e.kind || "expense", payer: e.payer, to: e.to || "", participants: [...(e.participants || [])], splitMode: e.splitMode || "equal",
+      exact: {}, items: (e.items || []).map(it => ({ name: it.name, price: it.price, who: [...(it.who || [])] })), receipt: null, source: e.source || "manual" };
+    if (e.splitMode === "exact" && e.exact) for (const pid in e.exact) draft.exact[pid] = L.fromS(L.toS(e.exact[pid] / (e.rate || 1)));
+    $("#eTitle").value = e.kind === "settle" ? "" : e.title || ""; $("#eAmt").value = e.amount ?? e.thb; $("#eNote").value = e.note || "";
+    $("#eDate").value = e.date || todayISO(); $("#eCat").value = e.category || "other";
+    setRadio("kind", draft.kind); setRadio("mode", draft.splitMode); setRadio("cur", e.currency || "THB");
+    if (e.currency === "CNY") $("#eRate").value = e.rate;
+    $("#rcptPrev").hidden = true;
+    $("#expFormTitle").textContent = "แก้ไขค่าใช้จ่าย"; $("#expSave").textContent = "บันทึกการแก้ไข";
+    setMsgEl($("#expMsg"), "กำลังแก้ไข กด \"ล้างฟอร์ม\" เพื่อยกเลิก");
+    renderDraft();
+    $("#expCard").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+});
+
+/* export */
+function summaryText() {
+  const ms = members(), bal = L.balances(expenses, ms.map(m => m.id)), tr = L.settleUp(bal);
+  const total = expenses.filter(e => e.kind !== "settle").reduce((a, e) => a + L.toS(e.thb), 0);
+  const lines = [`สรุปค่าใช้จ่ายทริปชิงเต่า (${L.thaiDate(todayISO())})`, `ใช้จ่ายรวม ${money(total)} บาท`, "", "รายคน"];
+  for (const id of Object.keys(bal)) { const b = bal[id];
+    lines.push(`• ${nameOf(id)} จ่าย ${money(b.paid)} / ส่วนตัวเอง ${money(b.owed)} → ${b.net > 0 ? "ได้คืน " + money(b.net) : b.net < 0 ? "ต้องจ่าย " + money(-b.net) : "เคลียร์แล้ว"}`); }
+  lines.push("", tr.length ? "โอนคืนกัน" : "ทุกคนเคลียร์ครบแล้ว");
+  tr.forEach((t, i) => lines.push(`${i + 1}. ${nameOf(t.from)} → ${nameOf(t.to)} ${money(t.amount)} บาท`));
+  lines.push("", "ดูรายละเอียด: " + shareUrl + "#split");
+  return lines.join("\n");
+}
+$("#copySum").addEventListener("click", () => copyText(summaryText(), $("#copySum"), "คัดลอกแล้ว วางใน LINE ได้เลย"));
+$("#csvBtn").addEventListener("click", () => {
+  const ms = members();
+  const q = v => `"${String(v ?? "").replace(/"/g, '""')}"`;
+  const head = ["วันที่", "รายการ", "หมวด", "ประเภท", "สกุลเงิน", "จำนวน", "อัตรา", "บาท", "คนจ่าย", "โอนให้", "วิธีหาร", ...ms.map(m => "ส่วนของ " + m.name), "หมายเหตุ"];
+  const lines = [head.map(q).join(",")];
+  for (const e of [...expenses].sort((a, b) => (a.date || "").localeCompare(b.date || ""))) {
+    const sh = L.sharesOf(e);
+    lines.push([e.date, e.title, CATS[e.category]?.[1] || "", e.kind === "settle" ? "โอนคืน" : "ค่าใช้จ่าย", e.currency, e.amount, e.rate, e.thb, nameOf(e.payer), e.to ? nameOf(e.to) : "",
+      e.kind === "settle" ? "" : ({ equal: "เท่ากัน", exact: "กำหนดเอง", items: "ตามรายการ" }[e.splitMode] || ""), ...ms.map(m => sh[m.id] ? L.fromS(sh[m.id]) : ""), e.note].map(q).join(","));
+  }
+  const blob = new Blob(["﻿" + lines.join("\r\n")], { type: "text/csv;charset=utf-8" });
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `ค่าใช้จ่ายทริปชิงเต่า-${todayISO()}.csv`;
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+});
+
+/* first paint */
+renderCosts(); renderPlan(); renderMe(); renderDraft(); renderProposals();
+</script>
+</body>
+</html>

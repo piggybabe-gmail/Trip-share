@@ -1,0 +1,3 @@
+{ "name": "ทริปชิงเต่า", "short_name": "ชิงเต่า", "start_url": "./", "display": "standalone",
+  "background_color": "#F3F6F7", "theme_color": "#0E4C6B",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml" }] }

@@ -1,0 +1,71 @@
+rules_version = '2';
+// Trip Share — Firestore rules
+// ทุกคนที่เปิดลิงก์ได้ uid แบบ anonymous อัตโนมัติ อ่านได้ทุกอย่างในทริป
+// แก้/ลบได้เฉพาะสิ่งที่ตัวเองสร้างจากเครื่องนั้น ยกเว้นการโหวต (แก้ได้เฉพาะเสียงของตัวเอง)
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function isOwner() { return signedIn() && resource.data.owner == request.auth.uid; }
+    function createsOwn() { return signedIn() && request.resource.data.owner == request.auth.uid; }
+    function keepsOwner() { return request.resource.data.owner == resource.data.owner; }
+    function onlyChanges(keys) { return request.resource.data.diff(resource.data).affectedKeys().hasOnly(keys); }
+
+    match /trips/{tripId} {
+
+      match /signups/{id} {
+        allow read: if signedIn();
+        allow create: if createsOwn()
+          && request.resource.data.name is string
+          && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 40
+          && request.resource.data.status in ['go', 'maybe'];
+        allow update: if isOwner() && keepsOwner()
+          && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 40
+          && request.resource.data.status in ['go', 'maybe'];
+        allow delete: if isOwner();
+      }
+
+      match /expenses/{id} {
+        allow read: if signedIn();
+        allow create: if createsOwn()
+          && request.resource.data.thb is number && request.resource.data.thb > 0
+          && request.resource.data.kind in ['expense', 'settle'];
+        allow update: if isOwner() && keepsOwner()
+          && request.resource.data.thb is number && request.resource.data.thb > 0;
+        allow delete: if isOwner();
+      }
+
+      // รูปบิลย่อขนาด (data URL) แยกเก็บเพื่อให้รายการโหลดเร็ว
+      match /receipts/{id} {
+        allow read: if signedIn();
+        allow create: if createsOwn() && request.resource.data.img is string && request.resource.data.img.size() < 900000;
+        allow update: if isOwner() && keepsOwner() && request.resource.data.img.size() < 900000;
+        allow delete: if isOwner();
+      }
+
+      match /proposals/{id} {
+        allow read: if signedIn();
+        allow create: if createsOwn()
+          && request.resource.data.status == 'open'
+          && request.resource.data.votes.keys().hasOnly([request.auth.uid]);
+        allow update: if signedIn() && (
+          // โหวต: แก้ได้เฉพาะเสียงของเครื่องตัวเอง
+          (onlyChanges(['votes'])
+            && request.resource.data.votes.diff(resource.data.votes).affectedKeys().hasOnly([request.auth.uid]))
+          // ปิดผลโหวต / ปรับแพลน / ย้อนกลับ
+          || (onlyChanges(['status', 'result', 'appliedAt', 'appliedVersion', 'prevPlan'])
+            && ((resource.data.status == 'open' && request.resource.data.status in ['applied', 'rejected'])
+             || (resource.data.status == 'applied' && request.resource.data.status == 'reverted')))
+        );
+        allow delete: if isOwner() && resource.data.status == 'open';
+      }
+
+      // แพลนปัจจุบัน (meta/plan) — เปลี่ยนผ่านการโหวต
+      match /meta/{docId} {
+        allow read: if signedIn();
+        allow write: if signedIn() && docId == 'plan'
+          && request.resource.data.data is string && request.resource.data.data.size() < 200000
+          && request.resource.data.version is int;
+      }
+    }
+  }
+}
