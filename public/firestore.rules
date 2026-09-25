@@ -1,0 +1,159 @@
+rules_version = '2';
+// Trip Share — Firestore rules (v3: owner-managed trip)
+//  • คนทั่วไปที่เปิดลิงก์ ได้ uid แบบ anonymous: ดูแพลน ลงชื่อสนใจ ดูรายชื่อ (ชื่อ/สถานะเท่านั้น)
+//  • สมาชิกที่เจ้าของยืนยันแล้ว (ล็อกอินด้วยชื่อผู้ใช้+รหัสผ่าน มีเอกสาร members/{uid}): หารค่าใช้จ่าย โหวต เอกสารกลาง โปรไฟล์
+//  • เจ้าของทริป (config/owner.uid): ทำได้ทุกอย่าง ยืนยันคน ตั้งเรท แก้ประมาณการ ยืนยันเงินกองกลาง ดูพาสปอร์ตทุกคน
+//  • config/owner ตั้งจาก Cloud Shell เท่านั้น (สคริปต์ setup_trip.py) — แก้จากหน้าเว็บไม่ได้
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /trips/{tripId} {
+      function authed() { return request.auth != null; }
+      function ownerDoc() { return /databases/$(database)/documents/trips/$(tripId)/config/owner; }
+      function tripOwner() { return authed() && exists(ownerDoc()) && get(ownerDoc()).data.uid == request.auth.uid; }
+      function memberPath() { return /databases/$(database)/documents/trips/$(tripId)/members/$(request.auth.uid); }
+      function member() { return authed() && exists(memberPath()); }
+      function crew() { return tripOwner() || member(); }
+      function selfSid(sid) { return member() && get(memberPath()).data.signupId == sid; }
+      function settingsPath() { return /databases/$(database)/documents/trips/$(tripId)/meta/settings; }
+      function closed() { return exists(settingsPath()) && get(settingsPath()).data.get('closed', false) == true; }
+      function openTrip() { return tripOwner() || !closed(); }
+
+      function createsOwn() { return authed() && request.resource.data.owner == request.auth.uid; }
+      function isCreator() { return authed() && resource.data.owner == request.auth.uid; }
+      function keepsOwner() { return request.resource.data.owner == resource.data.owner; }
+      function onlyChanges(keys) { return request.resource.data.diff(resource.data).affectedKeys().hasOnly(keys); }
+      function touches(keys) { return request.resource.data.diff(resource.data).affectedKeys().hasAny(keys); }
+      function smallText(f, n) { return !(f in request.resource.data) || (request.resource.data[f] is string && request.resource.data[f].size() <= n); }
+
+      match /config/{id} {
+        allow read: if true;
+        allow write: if false;
+      }
+
+      // ชื่อผู้ใช้ → อีเมลภายในระบบ (ต้องอ่านได้ก่อนล็อกอิน)
+      match /logins/{key} {
+        allow read: if true;
+        allow write: if tripOwner();
+      }
+
+      match /members/{uid} {
+        allow read: if crew();
+        allow write: if tripOwner();
+      }
+
+      // รายชื่อคนที่สนใจ: สาธารณะเห็นชื่อ/สถานะ ส่วนเบอร์ติดต่ออยู่ใน signupContact
+      match /signups/{id} {
+        function validSignup() {
+          return request.resource.data.name is string
+            && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 40
+            && request.resource.data.status in ['go', 'maybe']
+            && smallText('note', 200);
+        }
+        allow read: if authed();
+        allow create: if tripOwner()
+          || (createsOwn() && validSignup()
+              && request.resource.data.get('state', 'pending') == 'pending'
+              && !('memberUid' in request.resource.data));
+        allow update: if tripOwner()
+          || (isCreator() && keepsOwner() && validSignup()
+              && resource.data.get('state', 'pending') != 'confirmed'
+              && !touches(['state', 'memberUid', 'decidedAt']));
+        allow delete: if tripOwner()
+          || (isCreator() && resource.data.get('state', 'pending') != 'confirmed');
+      }
+
+      match /signupContact/{id} {
+        allow read: if tripOwner() || isCreator();
+        allow create: if tripOwner()
+          || (createsOwn() && smallText('phone', 40) && smallText('wechat', 60) && smallText('line', 60));
+        allow update: if tripOwner()
+          || (isCreator() && keepsOwner() && smallText('phone', 40) && smallText('wechat', 60) && smallText('line', 60));
+        allow delete: if tripOwner() || isCreator();
+      }
+
+      // โปรไฟล์สมาชิก (key = signup id): สมาชิกทริปเห็นกันเอง แก้ได้เฉพาะของตัวเองหรือเจ้าของทริป
+      match /profiles/{sid} {
+        allow read: if crew();
+        allow write: if tripOwner() || selfSid(sid);
+      }
+      // ผู้ติดต่อฉุกเฉิน: เห็นเฉพาะตัวเองกับเจ้าของทริป
+      match /profilesPrivate/{sid} {
+        allow read, write: if tripOwner() || selfSid(sid);
+      }
+
+      match /expenses/{id} {
+        function validMoney() {
+          return request.resource.data.thb is number && request.resource.data.thb > 0
+            && request.resource.data.kind in ['expense', 'settle', 'fund'];
+        }
+        allow read: if crew();
+        allow create: if tripOwner()
+          || (member() && createsOwn() && openTrip() && validMoney()
+              && request.resource.data.get('confirmed', false) != true);
+        allow update: if tripOwner()
+          || (member() && isCreator() && keepsOwner() && openTrip() && validMoney()
+              && resource.data.get('confirmed', false) != true
+              && !touches(['confirmed', 'confirmedAt', 'confirmedBy']));
+        allow delete: if tripOwner()
+          || (member() && isCreator() && openTrip() && resource.data.get('confirmed', false) != true);
+      }
+
+      // รูปบิลย่อขนาด / สลิปเข้ากองกลาง
+      match /receipts/{id} {
+        allow read: if crew();
+        allow create: if crew() && createsOwn() && request.resource.data.img is string && request.resource.data.img.size() < 900000;
+        allow update: if tripOwner() || (isCreator() && keepsOwner() && request.resource.data.img.size() < 900000);
+        allow delete: if tripOwner() || isCreator();
+      }
+
+      match /proposals/{id} {
+        allow read: if authed();
+        allow create: if crew() && createsOwn()
+          && request.resource.data.status == 'open'
+          && request.resource.data.votes.keys().hasOnly([request.auth.uid]);
+        allow update: if crew() && (
+          (onlyChanges(['votes'])
+            && request.resource.data.votes.diff(resource.data.votes).affectedKeys().hasOnly([request.auth.uid]))
+          || (onlyChanges(['status', 'result', 'appliedAt', 'appliedVersion', 'prevPlan'])
+            && ((resource.data.status == 'open' && request.resource.data.status in ['applied', 'rejected'])
+             || (resource.data.status == 'applied' && request.resource.data.status == 'reverted')))
+        );
+        allow delete: if tripOwner() || (isCreator() && resource.data.status == 'open');
+      }
+
+      // meta/plan เปลี่ยนผ่านการโหวต · meta/settings (เรท เครดิต ปิดยอด) และ meta/estimate เจ้าของแก้เท่านั้น
+      match /meta/{docId} {
+        allow read: if authed();
+        allow write: if (docId == 'plan' && crew()
+            && request.resource.data.data is string && request.resource.data.data.size() < 200000
+            && request.resource.data.version is int)
+          || (docId in ['settings', 'estimate'] && tripOwner());
+      }
+
+      // ศูนย์เอกสาร: shared = สมาชิกทุกคนเห็น · private (พาสปอร์ต ฯลฯ) = เจ้าตัว (sid) กับเจ้าของทริปเท่านั้น
+      match /docs/{id} {
+        function canSee() { return tripOwner() || (member() && (resource.data.kind == 'shared' || selfSid(resource.data.sid))); }
+        function validDoc() {
+          return request.resource.data.kind in ['shared', 'private']
+            && request.resource.data.title is string && request.resource.data.title.size() > 0 && request.resource.data.title.size() <= 120;
+        }
+        allow read: if canSee();
+        allow create: if crew() && createsOwn() && validDoc()
+          && (tripOwner() || request.resource.data.kind == 'shared' || selfSid(request.resource.data.sid));
+        allow update: if tripOwner() || (isCreator() && keepsOwner() && validDoc() && !touches(['kind', 'sid']));
+        allow delete: if tripOwner() || isCreator();
+      }
+      match /files/{id} {
+        function canSeeFile() { return tripOwner() || (member() && (resource.data.kind == 'shared' || selfSid(resource.data.sid))); }
+        allow read: if canSeeFile();
+        allow create: if crew() && createsOwn()
+          && request.resource.data.data is string && request.resource.data.data.size() < 1000000
+          && request.resource.data.kind in ['shared', 'private']
+          && (tripOwner() || request.resource.data.kind == 'shared' || selfSid(request.resource.data.sid));
+        allow update: if false;
+        allow delete: if tripOwner() || isCreator();
+      }
+    }
+  }
+}
