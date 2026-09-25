@@ -3,6 +3,16 @@
 export const toS = v => Math.round((Number(v) || 0) * 100);
 export const fromS = s => s / 100;
 
+/** Pseudo-member id for the trip's central fund (เงินกองกลาง). */
+export const FUND = "__fund";
+
+/** Convert an amount to baht: CNY uses the rate, THB (or anything else) stays as is. Returns baht rounded to satang. */
+export const toTHB = (amount, currency, rate) =>
+  fromS(toS((Number(amount) || 0) * (currency === "CNY" ? (Number(rate) || 0) : 1)));
+
+/** Does this document count in the money totals? Fund contributions count only after the owner confirms them. */
+export const counts = e => !!e && (e.kind !== "fund" || e.confirmed === true);
+
 /** Split an integer total across ids by weight, exactly (largest remainder). Works for negative totals too. */
 export function allocate(totalS, weights) {
   const ids = Object.keys(weights).filter(id => weights[id] > 0);
@@ -27,6 +37,7 @@ export const splitEqual = (totalS, ids) => allocate(totalS, Object.fromEntries(i
 /** Per-person share (satang) of one expense document. */
 export function sharesOf(e) {
   const total = toS(e.thb);
+  if (e.kind === "fund") return { [FUND]: total };          // money put into the central fund
   if (e.kind === "settle") return e.to ? { [e.to]: total } : {};
   const parts = (e.participants || []).filter(Boolean);
   if (e.splitMode === "exact" && e.exact) {
@@ -60,6 +71,7 @@ export function sharesOf(e) {
 export function validateExpense(e) {
   if (!(toS(e.thb) > 0)) return "ใส่จำนวนเงินมากกว่า 0";
   if (!e.payer) return "เลือกคนที่จ่ายเงิน";
+  if (e.kind === "fund") return e.payer === FUND ? "เลือกคนที่ใส่เงินเข้ากองกลาง" : "";
   if (e.kind === "settle") return e.to && e.to !== e.payer ? "" : "เลือกคนที่รับเงินคืน (ต้องไม่ใช่คนเดียวกับคนจ่าย)";
   if (!(e.participants || []).length) return "เลือกคนที่หารอย่างน้อย 1 คน";
   if (e.splitMode === "exact") {
@@ -79,13 +91,36 @@ export function balances(expenses, memberIds = []) {
   const touch = id => (b[id] ||= { paid: 0, owed: 0, net: 0 });
   memberIds.forEach(touch);
   for (const e of expenses) {
-    if (!e.payer) continue;
+    if (!e.payer || !counts(e)) continue;
     touch(e.payer).paid += toS(e.thb);
     const sh = sharesOf(e);
     for (const id in sh) touch(id).owed += sh[id];
   }
   for (const id in b) b[id].net = b[id].paid - b[id].owed;
   return b;
+}
+
+/** Central fund: confirmed money in, money paid out (bills + refunds), balance left, and contributions waiting for the owner. */
+export function fundSummary(expenses) {
+  let inS = 0, outS = 0, pendingS = 0;
+  for (const e of expenses) {
+    if (e.kind === "fund") { if (e.confirmed === true) inS += toS(e.thb); else pendingS += toS(e.thb); }
+    else if (e.payer === FUND) outS += toS(e.thb);
+  }
+  return { in: inS, out: outS, balance: inS - outS, pending: pendingS };
+}
+
+/** Owner-editable estimate. item = { name, amount, currency: THB|CNY, mode: "group"|"person", div?: number }.
+ *  group items are split by `div` people (or by n); person items are per head. Returns baht (not satang). */
+export function estimate(items, n, rate) {
+  const N = Math.max(1, Number(n) || 1);
+  const rows = (items || []).map(it => {
+    const thb = toTHB(it.amount, it.currency, rate);
+    const d = it.mode === "group" ? Math.max(1, Number(it.div) || N) : 1;
+    return { ...it, thb, per: it.mode === "group" ? thb / d : thb, groupTotal: it.mode === "group" ? thb : thb * N, by: d };
+  });
+  const perPerson = rows.reduce((a, r) => a + r.per, 0);
+  return { rows, perPerson, group: rows.filter(r => r.mode === "group"), person: rows.filter(r => r.mode !== "group"), total: perPerson * N };
 }
 
 /** Minimal-ish transfers to settle up (greedy: biggest debtor pays biggest creditor). */
