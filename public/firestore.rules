@@ -1,5 +1,5 @@
 rules_version = '2';
-// Trip Share — Firestore rules (v3: owner-managed trip)
+// Trip Share — Firestore rules (v3: owner-managed trip · v3.1 แพลน A/B)
 //  • คนทั่วไปที่เปิดลิงก์ ได้ uid แบบ anonymous: ดูแพลน ลงชื่อสนใจ ดูรายชื่อ (ชื่อ/สถานะเท่านั้น)
 //  • สมาชิกที่เจ้าของยืนยันแล้ว (ล็อกอินด้วยชื่อผู้ใช้+รหัสผ่าน มีเอกสาร members/{uid}): หารค่าใช้จ่าย โหวต เอกสารกลาง โปรไฟล์
 //  • เจ้าของทริป (config/owner.uid): ทำได้ทุกอย่าง ยืนยันคน ตั้งเรท แก้ประมาณการ ยืนยันเงินกองกลาง ดูพาสปอร์ตทุกคน
@@ -122,13 +122,23 @@ service cloud.firestore {
         allow delete: if tripOwner() || (isCreator() && resource.data.status == 'open');
       }
 
-      // meta/plan เปลี่ยนผ่านการโหวต · meta/settings (เรท เครดิต ปิดยอด) และ meta/estimate เจ้าของแก้เท่านั้น
+      // meta/plan (แพลน A) และ meta/planB เปลี่ยนผ่านการโหวต · meta/settings (เรท เครดิต ปิดยอด แพลนหลัก) และ meta/estimate เจ้าของแก้เท่านั้น
       match /meta/{docId} {
         allow read: if authed();
-        allow write: if (docId == 'plan' && crew()
+        allow write: if (docId in ['plan', 'planB'] && crew()
             && request.resource.data.data is string && request.resource.data.data.size() < 200000
             && request.resource.data.version is int)
           || (docId in ['settings', 'estimate'] && tripOwner());
+      }
+
+      // สมาชิกกด ❤️ แพลนที่ชอบ: 1 บัญชี 1 เอกสาร (id = uid) เลือกได้ A หรือ B
+      match /planPick/{pickUid} {
+        allow read: if crew();
+        allow write: if crew() && pickUid == request.auth.uid
+          && request.resource.data.choice in ['A', 'B']
+          && request.resource.data.keys().hasOnly(['choice', 'who', 'at'])
+          && (tripOwner() || selfSid(request.resource.data.who));
+        allow delete: if tripOwner() || (authed() && pickUid == request.auth.uid);
       }
 
       // ศูนย์เอกสาร: shared = สมาชิกทุกคนเห็น · private (พาสปอร์ต ฯลฯ) = เจ้าตัว (sid) กับเจ้าของทริปเท่านั้น

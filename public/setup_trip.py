@@ -1,20 +1,21 @@
 #!/usr/bin/env python3
 """Trip Share ชิงเต่า — ติดตั้งระบบสิทธิ์ (รันครั้งเดียวใน Google Cloud Shell ของโปรเจกต์ trip-share-aead6)
 
-ทำ 4 อย่าง:
+ทำ 5 อย่าง (รันซ้ำได้ ไม่ทำของเดิมพัง):
   1) เปิดการล็อกอินแบบชื่อผู้ใช้ + รหัสผ่าน (Email/Password ใน Firebase Authentication)
   2) ติดตั้งกฎสิทธิ์ Firestore (firestore.rules จาก GitHub repo นี้)
   3) สร้างบัญชีผู้จัดทริป — ถามชื่อผู้ใช้และรหัสผ่านตอนรัน รหัสผ่านไม่ถูกเก็บหรือแสดงที่ไหน
   4) ตรวจว่าคนทั่วไปอ่านข้อมูลลับไม่ได้จริง
+  5) ตรวจว่า AI อ่านบิล (Firebase AI Logic · Gemini แบบฟรี) เปิดใช้แล้ว
 
-วิธีรัน:  curl -sL https://raw.githubusercontent.com/piggybabe-gmail/trip-share/main/setup_trip.py -o ~/setup_trip.py && python3 ~/setup_trip.py
+วิธีรัน:  curl -sL https://raw.githubusercontent.com/piggybabe-gmail/trip-share/main/public/setup_trip.py -o ~/setup_trip.py && python3 ~/setup_trip.py
 """
 import getpass, json, subprocess, sys, time, urllib.error, urllib.parse, urllib.request
 
 P = "trip-share-aead6"
 TRIP = "qingdao"
 API_KEY = "AIzaSyAQpDb3dXWRDHU4gJveD4pfFkUYuXxNtWg"
-RAW = "https://raw.githubusercontent.com/piggybabe-gmail/trip-share/main/firestore.rules"
+RAW = "https://raw.githubusercontent.com/piggybabe-gmail/trip-share/main/public/firestore.rules"
 DOMAIN = "users.trip-share.app"
 FS = f"https://firestore.googleapis.com/v1/projects/{P}/databases/(default)/documents"
 
@@ -92,7 +93,7 @@ try:
     rules = urllib.request.urlopen(urllib.request.Request(RAW + "?n=%d" % time.time(), headers={"Cache-Control": "no-cache"}), timeout=60).read().decode()
 except Exception as e:
     die("โหลดไฟล์ firestore.rules จาก GitHub ไม่ได้: %s" % e)
-if "v3: owner-managed" not in rules:
+if "v3.1" not in rules:
     die("ไฟล์ firestore.rules บน GitHub ยังเป็นเวอร์ชันเก่า อัปโหลดไฟล์ใหม่ขึ้น GitHub ก่อน แล้วรอ 1 นาทีค่อยรันคำสั่งนี้อีกครั้ง")
 st, rs = call("POST", f"https://firebaserules.googleapis.com/v1/projects/{P}/rulesets", {"source": {"files": [{"name": "firestore.rules", "content": rules}]}})
 if st != 200:
@@ -159,6 +160,33 @@ if st == 200 and a.get("idToken"):
     call("POST", f"https://identitytoolkit.googleapis.com/v1/projects/{P}/accounts:delete", {"localId": a.get("localId")})
 else:
     print("4) ข้ามการตรวจสิทธิ์ (สร้างผู้ใช้ทดสอบไม่ได้) ไม่เป็นไร")
+
+# ---------- 5) AI อ่านบิล ----------
+AI_CONSOLE = f"https://console.firebase.google.com/project/{P}/ailogic"
+need = ["firebasevertexai.googleapis.com", "generativelanguage.googleapis.com"]
+st, sv = call("GET", f"https://serviceusage.googleapis.com/v1/projects/{P}/services?filter=state:ENABLED&pageSize=200")
+enabled = {x.get("config", {}).get("name") for x in sv.get("services", [])} if st == 200 else set()
+missing = [n for n in need if n not in enabled]
+if st == 200 and missing:
+    print("5) AI อ่านบิล: ยังไม่ได้เปิด ✗")
+    print("   เปิดลิงก์นี้ใน Safari: " + AI_CONSOLE)
+    print("   กด Get started › เลือก Gemini Developer API (ฟรี ไม่ต้องใส่บัตร) › กด Enable API แล้วกด Continue")
+    print("   ห้ามกดอัปเกรดเป็น Blaze · เสร็จแล้วรันคำสั่งนี้อีกครั้งเพื่อตรวจ")
+else:
+    ok = False
+    for model in ["gemini-3.5-flash", "gemini-3.8-flash"]:
+        st, r = call("POST", f"https://firebasevertexai.googleapis.com/v1beta/projects/{P}/models/{model}:generateContent?key={API_KEY}",
+                     {"contents": [{"role": "user", "parts": [{"text": "ตอบคำเดียวว่า OK"}]}]}, auth=False)
+        txt = json.dumps(r, ensure_ascii=False)
+        if st == 200:
+            print(f"5) AI อ่านบิล: ใช้ได้ ✓ (ทดสอบกับ {model} แบบฟรี)"); ok = True; break
+        if st in (401, 403) and ("app" in txt.lower() and "check" in txt.lower()):
+            print("5) AI อ่านบิล: เปิดแล้ว ✓ (ระบบป้องกัน App Check ทำงาน เว็บจริงผ่านได้ตามปกติ)"); ok = True; break
+        if st == 429:
+            print("5) AI อ่านบิล: เปิดแล้ว ✓ (ตอนนี้โควตาฟรีเต็มชั่วคราว ลองในเว็บภายหลัง)"); ok = True; break
+    if not ok:
+        print("5) AI อ่านบิล: ยังใช้ไม่ได้ (%s) %s" % (st, txt[:200]))
+        print("   เปิดลิงก์นี้ใน Safari: " + AI_CONSOLE + " แล้วกด Get started › Gemini Developer API › Enable API")
 
 print("\n✅ เสร็จแล้ว! เปิด https://%s.web.app กด “เข้าสู่ระบบ” ด้วยชื่อผู้ใช้ที่ตั้งไว้" % P)
 print("   จากนั้นไปแท็บ “จัดการทริป” กด “นี่คือฉัน” ที่ชื่อของคุณ แล้วเริ่มยืนยันเพื่อนได้เลย\n")

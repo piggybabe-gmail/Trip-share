@@ -367,6 +367,35 @@ input[type=file]{font-size:13.5px}
 .helpov .bd table{font-size:13.5px}
 .helpov .hnote{color:var(--muted);font-size:12.5px;text-align:center}
 footer b{color:var(--sea);font-weight:600}
+/* plan A/B switch */
+.pswitch{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.pbtn{appearance:none;text-align:left;font:inherit;color:var(--ink);background:var(--bg);border:2px solid var(--line);border-radius:14px;padding:12px 14px;display:grid;gap:3px;cursor:pointer;min-width:0}
+.pbtn .pkey{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.02em}
+.pbtn b{font-family:var(--display);font-size:17px;font-weight:600;line-height:1.25}
+.pbtn small{font-size:12.5px;color:var(--muted);display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.pbtn.on{border-color:var(--sea);background:linear-gradient(135deg,rgba(7,96,107,.10),rgba(91,60,196,.08))}
+.pbtn.on .pkey{color:var(--sea)}
+.pbtn:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+.pickbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px dashed var(--line)}
+.pickbar .btns{display:flex;gap:8px;flex-wrap:wrap}
+/* food */
+.foodlist{display:grid;gap:12px;margin-top:14px}
+@media (min-width:640px){.foodlist{grid-template-columns:1fr 1fr}}
+.food{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--bg);display:grid;grid-template-rows:auto 1fr}
+.fimg{position:relative;aspect-ratio:16/9;background:linear-gradient(135deg,var(--surface-2),var(--bg));display:grid;place-items:center;font-size:40px;overflow:hidden}
+.fimg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.fcr{position:absolute;right:6px;bottom:6px;font-size:10.5px;color:#fff;background:rgba(0,0,0,.45);padding:2px 7px;border-radius:99px;text-decoration:none;max-width:90%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fbd{padding:12px 14px 14px;display:grid;gap:4px;align-content:start}
+.fbd b{font-size:16px;font-weight:600}
+.fbd p{margin:2px 0;font-size:14px}
+.fbd small{color:var(--muted);font-size:12.5px;overflow-wrap:anywhere}
+.fhd{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.fprice{font-family:var(--display);font-weight:600;color:var(--roof);text-align:right;font-size:16px;line-height:1.2}
+.fprice small{display:block;font-family:var(--body);font-weight:400;font-size:11.5px;color:var(--muted)}
+.zhcopy{appearance:none;border:0;background:none;padding:0;font:inherit;color:var(--sea);text-align:left;cursor:pointer;font-size:14.5px;justify-self:start}
+/* AI attach */
+.aibar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px}
+.btn.ai{background:linear-gradient(135deg,var(--sea),var(--plume,#5B3CC4));color:#fff;border-color:transparent}
 </style>
 </head>
 <body>
@@ -473,8 +502,15 @@ footer b{color:var(--sea);font-weight:600}
 <section id="p-plan" role="tabpanel" aria-labelledby="t-plan" hidden>
   <div class="card gal-card"><div class="gal-head"><h2>ภาพที่เที่ยวตามแพลน</h2><p class="sub">ปัดดูที่เที่ยวในทริป แตะภาพเพื่อดูภาพใหญ่</p></div><div class="gal" data-gal></div><p class="gal-note">ภาพจาก Wikimedia Commons · แตะภาพเพื่อดูชื่อช่างภาพและสัญญาอนุญาต</p></div>
 
+  <div class="card planpick">
+    <h2>เลือกดูแพลน</h2>
+    <p class="sub">มี 2 แพลนให้เทียบกัน กดเลือกเพื่อดูรายละเอียด สมาชิกกด ❤️ แพลนที่ชอบได้ ผู้จัดทริปเป็นคนตั้งแพลนหลัก</p>
+    <div class="pswitch" id="planSwitch" role="group" aria-label="เลือกแพลน"></div>
+    <div class="pickbar" id="planPickBar" hidden></div>
+  </div>
+
   <div class="card" id="planCard">
-    <h2>โปรแกรมทัวร์ส่วนตัว 5 วัน 4 คืน</h2>
+    <h2 id="planTitle">โปรแกรมทัวร์ส่วนตัว 5 วัน 4 คืน</h2>
     <p class="sub">บินตรง กรุงเทพฯ (BKK) – ชิงเต่า (TAO) ประมาณ 4 ชม. 40 นาที · รถส่วนตัวพร้อมคนขับ · ไม่ใช้ไกด์ · ไม่เข้าร้านช้อปบังคับ · แพลนนี้เปลี่ยนได้ด้วยการโหวตของสมาชิกทริป</p>
     <div class="plan-meta">
       <span class="chip info" id="planDate">วันเดินทาง: ยังไม่กำหนด</span>
@@ -482,13 +518,25 @@ footer b{color:var(--sea);font-weight:600}
     </div>
     <div id="days"></div>
     <div id="planNotesWrap" hidden>
-      <h3 style="margin-top:12px">มติเพิ่มเติมจากการโหวต</h3>
+      <h3 style="margin-top:12px">หมายเหตุแพลน</h3>
       <ul class="inc" id="planNotes"></ul>
     </div>
   </div>
 
+  <div class="card" id="foodCard">
+    <h2>ร้านเด็ดที่คนแนะนำ</h2>
+    <p class="sub">ร้านดังในชิงเต่าและเวยไห่ ราคาเฉลี่ยต่อคนเป็นหยวน (≈ บาท คิดจากเรทในทริป) กดชื่อจีนเพื่อคัดลอกไปค้นใน Amap / Dianping หรือยื่นให้คนขับดู</p>
+    <div class="seg" role="radiogroup" aria-label="เมือง" id="foodCity">
+      <input type="radio" name="fcity" id="fcAll" value="" checked><label for="fcAll">ทั้งหมด</label>
+      <input type="radio" name="fcity" id="fcQ" value="ชิงเต่า"><label for="fcQ">ชิงเต่า</label>
+      <input type="radio" name="fcity" id="fcW" value="เวยไห่"><label for="fcW">เวยไห่</label>
+    </div>
+    <div class="foodlist" id="foodList"></div>
+    <p class="gal-note">ราคาเฉลี่ยจาก Ctrip / Trip.com (ก.ย. 2026) อาจเปลี่ยนตอนเดินทาง · ภาพประกอบเมนูจาก Wikimedia Commons ไม่ใช่ภาพจากร้าน</p>
+  </div>
+
   <div class="card" id="propFormCard">
-    <h2>เสนอเปลี่ยนแพลน</h2>
+    <h2>เสนอเปลี่ยนแพลน <span class="chip info" id="propPlanLbl">แพลน A</span></h2>
     <p class="sub" id="propRule">สมาชิกทริปที่ยืนยันแล้วโหวตได้คนละ 1 เสียง</p>
     <div class="gatenote" id="propGate" hidden>เข้าสู่ระบบด้วยชื่อผู้ใช้ที่ได้จากผู้จัดทริป เพื่อเสนอและโหวตเปลี่ยนแพลน <button class="btn small" type="button" data-login>เข้าสู่ระบบ</button></div>
     <form id="propForm" novalidate>
@@ -609,9 +657,14 @@ footer b{color:var(--sea);font-weight:600}
         <button class="btn sea" type="button" id="camBtn">📷 ถ่ายรูปบิล</button>
         <button class="btn ghost" type="button" id="pickBtn">เลือกรูป / PDF</button>
       </div>
-      <p class="status" style="margin:0">AI จะอ่านร้าน วันที่ ยอดเงิน สกุลเงิน และรายการในบิลให้ ถ้าเป็นสลิปโอนคืนกันจะจับคู่ชื่อคนโอน-คนรับให้ ตรวจแล้วค่อยกดบันทึก</p>
+      <p class="status" style="margin:0">แนบรูปก่อน แล้วกด <b>✨ ให้ AI กรอกให้</b> AI จะอ่านร้าน วันที่ ยอดเงิน สกุลเงิน และรายการในบิล ถ้าเป็นสลิปโอนคืนกันจะจับคู่ชื่อคนโอน-คนรับให้ ปกติใช้เวลา 3–10 วินาที ตรวจแล้วค่อยกดบันทึก ไม่อยากใช้ AI ก็กรอกเองด้านล่างได้เลย</p>
+      <img class="rcpt" id="rcptPrev" alt="ภาพบิลที่แนบ" hidden>
+      <div class="aibar" id="aiBar" hidden>
+        <button class="btn ai" type="button" id="aiGo">✨ ให้ AI กรอกให้</button>
+        <button class="btn link" type="button" id="aiClear">เอารูปออก</button>
+        <span class="status" id="aiFile"></span>
+      </div>
       <p class="msg" id="aiMsg" role="status" aria-live="polite"></p>
-      <img class="rcpt" id="rcptPrev" alt="ภาพบิลที่เลือก" hidden>
     </div>
 
     <form id="expForm" novalidate>
@@ -991,6 +1044,61 @@ const DEFAULT_PLAN = { version:1, startDate:"", notes:[], days:[
     ["ตลาดของฝาก/ห้าง MixC ตามเวลาเที่ยวบิน",""],
     ["รถส่งสนามบินเจียวตง บินกลับกรุงเทพฯ",""] ] },
 ]};
+/* แพลน B: ชิงเต่า + เวยไห่ (ค้างเวยไห่ 1 คืน) — รถตู้ 9 ที่นั่งพร้อมคนขับตลอดทริป ไม่ต้องลากกระเป๋า */
+const DEFAULT_PLAN_B = { version:1, name:"ชิงเต่า + เวยไห่", startDate:"", notes:[
+  "ช่วงเดินทาง: ปลาย ต.ค. – ต้น พ.ย. 2027 อากาศราว 10–18°C ริมทะเลลมแรง เตรียมแจ็กเก็ตกันลม",
+  "เหมารถตู้ 9 ที่นั่งพร้อมคนขับตลอด 5 วัน (5 คน + กระเป๋าใหญ่ 5 ใบ รถ 7 ที่นั่งจะแน่นเกินไป) ตกลงค่าวิ่งไปเวยไห่และค่าที่พักคนขับ 1 คืนไว้ก่อน",
+  "คืนที่ 3 พักเวยไห่: ฝากกระเป๋าใหญ่ไว้ที่โรงแรมชิงเต่า หิ้วไปแค่กระเป๋าเล็ก แล้ววันที่ 4 กลับมาเช็กอินโรงแรมเดิม",
+  "เกาะหลิวกง: จองเรือไป-กลับล่วงหน้าอย่างน้อย 1 วันผ่าน WeChat ทางการของเกาะ",
+  "พระอาทิตย์ตกราว 5 โมงเย็น จุดชมวิวตอนเย็นวางไว้ 16:30"
+], days:[
+  { t:"บินตรงสู่ชิงเต่า · ไถตง", tag:"บ่าย–ค่ำ", items:[
+    ["ถึงสนามบินเจียวตง รถตู้รับ ขนกระเป๋าทั้งหมดขึ้นรถ เช็กอินโรงแรมชิงเต่า",""],
+    ["ถนนคนเดินไถตง","台东步行街"],
+    ["มื้อค่ำ: ซีฟู้ด + เบียร์สด ถนนหยิงโข่ว (振宇啤酒屋)","营口路"] ] },
+  { t:"เมืองเก่าเยอรมัน · พิพิธภัณฑ์เบียร์", tag:"เต็มวัน", items:[
+    ["สะพานจั้นเฉียว และโบสถ์เซนต์ไมเคิล","栈桥 · 天主教堂"],
+    ["มื้อกลางวัน: ปลาหมึกย่าง ร้านหวังเจี่ย ถนนจงซาน (หรือร้านร้อยปีชุนเหอโหลว)","王姐烧烤 · 春和楼"],
+    ["สวนเสี่ยวอวี๋ซาน + ย่านวิลล่าปาต้ากวน ใบไม้เปลี่ยนสี","小鱼山 · 八大关"],
+    ["พิพิธภัณฑ์เบียร์ชิงเต่า ชิมเบียร์สดจากโรงงาน","青岛啤酒博物馆"],
+    ["จัตุรัส 4 พฤษภา ชมพระอาทิตย์ตก 16:30","五四广场"],
+    ["มื้อค่ำ: ซีฟู้ดถนนหยุนเซียว","云霄路"] ] },
+  { t:"เขาเหลาซาน → เวยไห่", tag:"ย้ายเมือง", items:[
+    ["08:00 เขาเหลาซาน วัดไท่ชิง ขึ้นกระเช้าชมทะเล (อยู่ทางไปเวยไห่พอดี)","崂山 · 太清宫"],
+    ["มื้อกลางวัน: ข้าวหอยทะเลคลุก ร้านเฉียนไห่เหยียน (ย่านเหลาซาน)","前海沿"],
+    ["13:30 นั่งรถตู้ไปเวยไห่ ราว 3 ชม.",""],
+    ["ประตูแห่งความสุข ชมพระอาทิตย์ตก","幸福门"],
+    ["มื้อค่ำ: ย่านเกาหลี ร้านก่านไห่กุยไหล (หอยตลับ ข้าวหอยทะเล)","韩乐坊 · 赶海归来"],
+    ["พักเวยไห่ 1 คืน",""] ] },
+  { t:"เวยไห่ · เกาะหลิวกง → กลับชิงเต่า", tag:"เต็มวัน", items:[
+    ["07:00 ถนนลาดลงทะเล ไปเช้าก่อนคนเยอะ","火炬八街"],
+    ["มื้อเช้า: ซาลาเปาสาหร่ายทะเล","山后海菜包子"],
+    ["จุดชมวิวหน้าผา","猫头山"],
+    ["10:00 เกาะหลิวกง พิพิธภัณฑ์สงครามจีน-ญี่ปุ่น (นั่งเรือ 20 นาที)","刘公岛"],
+    ["มื้อกลางวัน: เกี๊ยวปลาอินทรี ของขึ้นชื่อเวยไห่","鲅鱼水饺"],
+    ["15:00 รถตู้กลับชิงเต่า เช็กอินโรงแรมเดิม",""],
+    ["มื้อค่ำอำลา: เกี๊ยวปลา ร้านฉวนเกอ สาขา MixC","船歌鱼水饺"] ] },
+  { t:"ช้อปของฝาก · บินกลับ", tag:"ครึ่งวัน", items:[
+    ["ห้าง MixC / ของฝาก ตามเวลาเที่ยวบิน","万象城"],
+    ["รถตู้ส่งสนามบินเจียวตง บินกลับกรุงเทพฯ",""] ] },
+]};
+const PLAN_KEYS = ["A", "B"];
+const PLAN_DEFAULT_NAME = { A: "ชิงเต่าล้วน", B: "ชิงเต่า + เวยไห่" };
+const PLAN_DEFAULTS = { A: DEFAULT_PLAN, B: DEFAULT_PLAN_B };
+
+/* ร้านเด็ด (ราคาเฉลี่ยต่อคนจาก Ctrip/Trip.com ก.ย. 2026 — อาจเปลี่ยน) · img = คำค้นภาพจาก Wikimedia Commons */
+const FOOD = [
+  { city:"ชิงเต่า", th:"ฉวนเกอ เกี๊ยวปลา", zh:"船歌鱼水饺", price:"≈¥85", area:"หลายสาขา · MixC (万象城) / 闽江二路 / ร้านแรก 瞿塘峡路39号", dish:"เกี๊ยวปลาหมึกดำ เกี๊ยวปลาจวด เกี๊ยวปลาอินทรี · สั่งจานรวมหลายไส้", when:"แพลน B วันที่ 4 มื้อค่ำ", img:{ q:"jiaozi dumplings", re:/dumpling|jiaozi|饺/i } },
+  { city:"ชิงเต่า", th:"หวังเจี่ยบาร์บีคิว", zh:"王姐烧烤", price:"≈¥31", area:"ถนนจงซาน 中山路113号 เมืองเก่า", dish:"ปลาหมึกย่างซอสลับ หนวดปลาหมึก เนื้อแกะเสียบไม้ · คิวยาว ไปก่อนเที่ยง", when:"วันที่ 2 มื้อกลางวัน", img:{ q:"grilled squid", re:/squid|鱿鱼/i } },
+  { city:"ชิงเต่า", th:"ชุนเหอโหลว ร้านร้อยปี", zh:"春和楼", price:"≈¥79", area:"ถนนจงซาน 中山路146号", dish:"ไก่ทอดกรอบ 香酥鸡 เกี๊ยวกุ้งนึ่ง · อาหารซานตงดั้งเดิม ร้านเก่าแก่ตั้งแต่ยุคชิง", when:"วันที่ 2 ทางเลือกมื้อกลางวัน", img:{ q:"Chunhelou Qingdao", re:/chunhe|春和楼/i } },
+  { city:"ชิงเต่า", th:"เฉียนไห่เหยียน อาหารชิงเต่า", zh:"前海沿", price:"≈¥67–100", area:"ย่านเหลาซาน 大拇指广场 3F (同安路880号)", dish:"ข้าวคลุกหนอนทะเล 海肠捞饭 กุ้งกระเทียม ปลาจวดราดน้ำมัน · ติดอันดับ 'ร้านต้องกิน' ต่อเนื่อง", when:"แพลน B วันที่ 3 มื้อกลางวัน", img:{ q:"Urechis unicinctus", re:/urechis|海肠/i } },
+  { city:"ชิงเต่า", th:"ถนนเบียร์หยิงโข่ว · เจิ้นอวี่เบียร์เฮาส์", zh:"营口路 · 振宇啤酒屋", price:"ตามน้ำหนักซีฟู้ด", area:"ใกล้ไถตง เขตซื่อเป่ย", dish:"เลือกซีฟู้ดสดจากตู้ให้ร้านทำ เบียร์สดใส่ถุง", when:"วันที่ 1 มื้อค่ำ", img:{ q:"Tsingtao beer bag", re:/beer|啤酒/i } },
+  { city:"ชิงเต่า", th:"ถนนซีฟู้ดหยุนเซียว", zh:"云霄路美食街", price:"≈¥100–150", area:"ใกล้จัตุรัส 4 พฤษภา", dish:"หอยตลับผัดเผ็ด 辣炒蛤蜊 กุ้ง ปูต่าง ๆ ร้านเรียงทั้งถนน", when:"วันที่ 2 มื้อค่ำ", img:{ q:"stir fried clams", re:/clam|蛤/i } },
+  { city:"เวยไห่", th:"ก่านไห่กุยไหล ซีฟู้ดบาร์บีคิว", zh:"赶海归来·肥蛤·海鲜烧烤", price:"≈¥95", area:"ย่านเกาหลี 韩乐坊 เขตหวนชุ่ย", dish:"หอยตลับ ข้าวคลุกหนอนทะเล ซีฟู้ดรวม เกี๊ยวปลาอินทรี", when:"แพลน B วันที่ 3 มื้อค่ำ", img:{ q:"seafood barbecue", re:/seafood|海鲜|clam/i } },
+  { city:"เวยไห่", th:"ซานโฮ่ว ซาลาเปาสาหร่าย", zh:"山后海菜包子(竹岛店)", price:"≈¥25", area:"เขตหวนชุ่ย สาขาจู๋เต่า", dish:"ซาลาเปาไส้สาหร่ายทะเลทำมือ ของเช้าขึ้นชื่อ", when:"แพลน B วันที่ 4 มื้อเช้า", img:{ q:"baozi steamed buns", re:/baozi|bun|包子/i } },
+  { city:"เวยไห่", th:"ไป่ซิ่ง ซีฟู้ดบาร์บีคิว", zh:"百姓海鲜烧烤家常菜", price:"≈¥74", area:"เขตหวนชุ่ย", dish:"เกี๊ยวปลาอินทรี 鲅鱼水饺 ซีฟู้ดย่าง อาหารบ้าน ๆ", when:"แพลน B วันที่ 4 มื้อกลางวัน", img:{ q:"Spanish mackerel", re:/mackerel|鲅/i } },
+];
+
 const INCLUDED = ["ที่พักโรงแรม 4 ดาว 4 คืน (ห้องละ 2 คน)","รถส่วนตัวพร้อมคนขับตลอดโปรแกรม และรับส่งสนามบิน","ค่าเข้าชมตามโปรแกรม","ค่าอาหารตามที่ประมาณไว้","ประกันการเดินทาง และ eSIM","ทริปนี้ไม่ใช้ไกด์ เที่ยวกันเองตามแพลน"];
 const EXCLUDED = ["ค่าห้องพักเดี่ยว ถ้าอยากพักคนเดียว","ของฝากและค่าใช้จ่ายส่วนตัว","พาสปอร์ตอายุเหลือไม่น้อยกว่า 6 เดือน","แอป Alipay/WeChat Pay ผูกบัตรไว้ก่อนไป (จีนใช้เงินสดน้อยมาก)"];
 const CATS = { food:["🍜","อาหาร/เครื่องดื่ม"], hotel:["🏨","ที่พัก"], transport:["🚕","เดินทาง"], ticket:["🎫","ตั๋ว/ค่าเข้าชม"], shopping:["🛍️","ช้อปปิ้ง"], other:["💡","อื่นๆ"] };
@@ -1012,9 +1120,14 @@ function tsDate(t) { const ms = t?.toMillis ? t.toMillis() : (t?.seconds ? t.sec
 /* ============== STATE ============== */
 let uid = null, isAnon = true, ownerInfo = undefined, myMember = undefined, role = "loading";
 let rows = [], contacts = {}, membersList = [], profiles = {}, privs = {}, expenses = [], proposals = [], docsList = { mine: [], shared: [], all: [] };
-let plan = structuredClone(DEFAULT_PLAN), planLoaded = false;
+let plans = { A: structuredClone(DEFAULT_PLAN), B: structuredClone(DEFAULT_PLAN_B) }, planLoadedK = { A: false, B: false };
+let viewPlan = "A", viewTouched = false, picks = {};
+let plan = plans.A, planLoaded = false;   // plan = แพลนที่กำลังดูอยู่
+const planName = k => plans[k]?.name || PLAN_DEFAULT_NAME[k];
+const mainPlan = () => PLAN_KEYS.includes(settings.mainPlan) ? settings.mainPlan : "A";
 let settings = { rate: DEFAULT_RATE, credit: DEFAULT_CREDIT, closed: false }, estItems = structuredClone(DEFAULT_ESTIMATE), estSaved = false;
 let chosenN = null, editingId = null, confirmId = null;
+let pending = null;   // ไฟล์บิลที่แนบไว้ รอกดให้ AI อ่าน
 const isOwner = () => role === "owner";
 const isCrew = () => role === "owner" || role === "member";
 const me = () => myMember?.signupId || "";
@@ -1039,8 +1152,8 @@ const tripCol = name => collection(db, "trips", TRIP_ID, name);
 const tripDoc = (...p) => doc(db, "trips", TRIP_ID, ...p);
 const colSign = tripCol("signups"), colContact = tripCol("signupContact"), colExp = tripCol("expenses"), colProp = tripCol("proposals"),
       colRcpt = tripCol("receipts"), colMem = tripCol("members"), colProf = tripCol("profiles"), colPriv = tripCol("profilesPrivate"),
-      colDocs = tripCol("docs"), colFiles = tripCol("files"), colLogin = tripCol("logins");
-const planRef = tripDoc("meta", "plan"), settingsRef = tripDoc("meta", "settings"), estRef = tripDoc("meta", "estimate"), ownerRef = tripDoc("config", "owner");
+      colDocs = tripCol("docs"), colFiles = tripCol("files"), colLogin = tripCol("logins"), colPick = tripCol("planPick");
+const planRefs = { A: tripDoc("meta", "plan"), B: tripDoc("meta", "planB") }, settingsRef = tripDoc("meta", "settings"), estRef = tripDoc("meta", "estimate"), ownerRef = tripDoc("config", "owner");
 
 let baseSubs = [], crewSubs = [], crewFor = null;
 const stopAll = arr => { arr.forEach(f => { try { f(); } catch(e){} }); arr.length = 0; };
@@ -1049,6 +1162,7 @@ onAuthStateChanged(auth, user => {
   stopAll(baseSubs); stopAll(crewSubs); crewFor = null;
   rows = []; contacts = {}; membersList = []; profiles = {}; privs = {}; expenses = []; proposals = []; docsList = { mine: [], shared: [], all: [] };
   ownerInfo = undefined; myMember = undefined; role = "loading";
+  viewTouched = false; picks = {};
   if (!user) { uid = null; signInAnonymously(auth).catch(err => { $("#connStatus").textContent = "เชื่อมต่อไม่ได้ ลองรีเฟรชหน้าอีกครั้ง (" + err.code + ")"; }); renderAll(); return; }
   uid = user.uid; isAnon = user.isAnonymous;
   $("#submitBtn").disabled = false;
@@ -1062,14 +1176,20 @@ onAuthStateChanged(auth, user => {
   baseSubs.push(onSnapshot(query(colProp, orderBy("createdAt", "desc")), snap => {
     proposals = snap.docs.map(d => ({ id: d.id, ...d.data() })); renderProposals();
   }, err => { $("#propEmpty").textContent = "โหลดข้อเสนอไม่ได้ (" + err.code + ")"; }));
-  baseSubs.push(onSnapshot(planRef, snap => {
+  PLAN_KEYS.forEach(k => baseSubs.push(onSnapshot(planRefs[k], snap => {
     if (snap.exists()) {
-      const prevVer = plan.version;
-      try { plan = { ...JSON.parse(snap.data().data), version: snap.data().version }; } catch(e) {}
-      planLoaded = true; renderPlan(prevVer && prevVer !== plan.version); renderProposals();
-    } else if (isCrew()) seedPlan();
-  }, err => console.warn("plan", err)));
-  baseSubs.push(onSnapshot(settingsRef, s => { settings = { rate: DEFAULT_RATE, credit: DEFAULT_CREDIT, closed: false, ...(s.exists() ? s.data() : {}) }; renderAll(); }, e => console.warn("settings", e)));
+      const prevVer = plans[k].version;
+      try { plans[k] = { ...JSON.parse(snap.data().data), version: snap.data().version }; } catch(e) {}
+      planLoadedK[k] = true; planLoaded = planLoadedK.A;
+      if (k === viewPlan) { plan = plans[k]; renderPlan(prevVer && prevVer !== plans[k].version); } else renderPlanSwitch();
+      renderProposals();
+    } else if (isCrew()) seedPlan(k);
+  }, err => console.warn("plan " + k, err))));
+  baseSubs.push(onSnapshot(settingsRef, s => {
+    settings = { rate: DEFAULT_RATE, credit: DEFAULT_CREDIT, closed: false, ...(s.exists() ? s.data() : {}) };
+    if (!viewTouched) { viewPlan = mainPlan(); plan = plans[viewPlan]; }
+    renderAll();
+  }, e => console.warn("settings", e)));
   baseSubs.push(onSnapshot(estRef, s => { estSaved = s.exists() && Array.isArray(s.data().items); estItems = estSaved ? s.data().items : structuredClone(DEFAULT_ESTIMATE); renderCosts(); }, e => console.warn("estimate", e)));
   renderAll();
 });
@@ -1086,6 +1206,7 @@ function decideRole() {
 function startCrewSubs() {
   stopAll(crewSubs); crewFor = role;
   crewSubs.push(onSnapshot(colMem, s => { membersList = s.docs.map(d => ({ uid: d.id, ...d.data() })); renderAll(); }, e => console.warn("members", e)));
+  crewSubs.push(onSnapshot(colPick, s => { picks = Object.fromEntries(s.docs.map(d => [d.id, d.data()])); renderPlanSwitch(); }, e => console.warn("picks", e)));
   crewSubs.push(onSnapshot(colProf, s => { profiles = Object.fromEntries(s.docs.map(d => [d.id, d.data()])); renderCrew(); }, e => console.warn("profiles", e)));
   crewSubs.push(onSnapshot(query(colExp, orderBy("createdAt", "desc")), snap => {
     expenses = snap.docs.map(d => ({ id: d.id, ...d.data() })); renderSplit(); renderDocs();
@@ -1102,14 +1223,14 @@ function startCrewSubs() {
     }
   }
 }
-function seedPlanIfMissing() { if (!planLoaded) getDoc(planRef).then(s => { if (!s.exists()) seedPlan(); }).catch(() => {}); }
-async function seedPlan() {
+function seedPlanIfMissing() { PLAN_KEYS.forEach(k => { if (!planLoadedK[k]) getDoc(planRefs[k]).then(s => { if (!s.exists()) seedPlan(k); }).catch(() => {}); }); }
+async function seedPlan(k = "A") {
   try {
     await runTransaction(db, async tx => {
-      const s = await tx.get(planRef);
-      if (!s.exists()) tx.set(planRef, { data: JSON.stringify(DEFAULT_PLAN), version: 1, updatedAt: serverTimestamp() });
+      const s = await tx.get(planRefs[k]);
+      if (!s.exists()) tx.set(planRefs[k], { data: JSON.stringify(PLAN_DEFAULTS[k]), version: 1, updatedAt: serverTimestamp() });
     });
-  } catch(e) { console.warn("seed plan", e); }
+  } catch(e) { console.warn("seed plan " + k, e); }
 }
 
 /* ============== ACCOUNT: login / logout ============== */
@@ -1202,7 +1323,7 @@ function renderAll() {
   $("#heroConf").textContent = conf; $("#heroWait").textContent = wait;
   $("#cConf").textContent = conf; $("#cWait").textContent = wait; $("#cRes").textContent = res;
   $("#adminDot").hidden = !isOwner() || !wait; $("#adminDot").textContent = wait;
-  renderAcct(); renderSignups(); renderCosts(); renderPlan(); renderProposals(); renderSplit(); renderDraft(); renderDocs(); renderCrew(); renderAdmin();
+  renderAcct(); renderSignups(); renderCosts(); renderPlan(); renderFood(); renderProposals(); renderSplit(); renderDraft(); renderDocs(); renderCrew(); renderAdmin();
 }
 
 /* ============== SIGN-UP (public) ============== */
@@ -1334,7 +1455,39 @@ function renderEstEditor() {
 $("#estEditBtn").addEventListener("click", () => { estEditing = !estEditing; renderCosts(); });
 
 /* ============== PLAN ============== */
+function renderPlanSwitch() {
+  const box = $("#planSwitch"); if (!box) return;
+  const tally = { A: 0, B: 0 }, voters = { A: [], B: [] };
+  const seen = new Set();
+  Object.values(picks).sort((a, b) => (b.at || 0) - (a.at || 0)).forEach(v => { if (!v || !v.who || seen.has(v.who) || !PLAN_KEYS.includes(v.choice)) return; seen.add(v.who); if (!confirmedRows().some(r => r.id === v.who)) return; tally[v.choice]++; voters[v.choice].push(nameOf(v.who)); });
+  const mine = me() ? Object.values(picks).filter(v => v && v.who === me()).sort((a, b) => (b.at || 0) - (a.at || 0))[0]?.choice : null;
+  box.innerHTML = PLAN_KEYS.map(k => `<button type="button" class="pbtn${k === viewPlan ? " on" : ""}" data-plan="${k}" aria-pressed="${k === viewPlan}">
+      <span class="pkey">แพลน ${k}</span><b>${esc(planName(k))}</b>
+      <small>${k === mainPlan() ? '<span class="chip ok">แพลนหลัก</span> ' : ""}${isCrew() ? `❤️ ${tally[k]} เสียง` : `${plans[k].days.length} วัน`}</small></button>`).join("");
+  const act = $("#planPickBar");
+  if (!isCrew()) { act.hidden = true; return; }
+  act.hidden = false;
+  const who = voters[viewPlan].length ? ` · ชอบแพลนนี้: ${voters[viewPlan].map(esc).join(", ")}` : "";
+  act.innerHTML = `<span class="status">กำลังดูแพลน ${viewPlan}${who}</span>
+    <span class="btns">${me() ? `<button class="btn small ${mine === viewPlan ? "sea" : "ghost"}" type="button" data-pick="${viewPlan}" aria-pressed="${mine === viewPlan}">${mine === viewPlan ? "❤️ คุณเลือกแพลนนี้" : "🤍 ฉันชอบแพลนนี้"}</button>` : ""}
+    ${isOwner() && viewPlan !== mainPlan() ? `<button class="btn small" type="button" data-main="${viewPlan}">ตั้งเป็นแพลนหลัก</button>` : ""}</span>`;
+}
+$("#planSwitch").addEventListener("click", e => {
+  const b = e.target.closest("[data-plan]"); if (!b) return;
+  viewPlan = b.dataset.plan; viewTouched = true; plan = plans[viewPlan]; planLoaded = planLoadedK[viewPlan];
+  renderPlan(); renderProposals();
+});
+$("#planPickBar").addEventListener("click", async e => {
+  const pk = e.target.closest("[data-pick]"), mn = e.target.closest("[data-main]");
+  try {
+    if (pk && me()) { pk.disabled = true; await setDoc(doc(colPick, uid), { choice: pk.dataset.pick, who: me(), at: Date.now() }); }
+    if (mn && isOwner()) { mn.disabled = true; await setDoc(settingsRef, { mainPlan: mn.dataset.main }, { merge: true }); }
+  } catch (err) { setMsgEl($("#propMsg"), "บันทึกไม่สำเร็จ (" + errText(err) + ")", "err"); }
+});
 function renderPlan(flash = false) {
+  plan = plans[viewPlan];
+  $("#planTitle").textContent = `แพลน ${viewPlan} · ${planName(viewPlan)} · ${plan.days.length} วัน ${Math.max(0, plan.days.length - 1)} คืน`;
+  renderPlanSwitch();
   $("#planDate").textContent = plan.startDate
     ? `วันเดินทาง: ${L.thaiDate(plan.startDate)} – ${L.thaiDate(plan.startDate, plan.days.length - 1)}`
     : "วันเดินทาง: ยังไม่กำหนด (เสนอได้ด้วยการโหวต)";
@@ -1398,7 +1551,7 @@ $("#propForm").addEventListener("submit", async e => {
   try { L.applyProposal(plan, p); } catch (err) { return setMsgEl(msg, err.message, "err"); }
   $("#propSubmit").disabled = true;
   try {
-    const ref = await addDoc(colProp, { ...p, owner: uid, by: me(), byName: nameOf(me()), status: "open",
+    const ref = await addDoc(colProp, { ...p, plan: viewPlan, owner: uid, by: me(), byName: nameOf(me()), status: "open",
       votes: { [uid]: { v: 1, who: me(), at: Date.now() } }, createdAt: serverTimestamp(), createdMs: Date.now() });
     setMsgEl(msg, "ส่งข้อเสนอแล้ว โหวตเห็นด้วยให้อัตโนมัติ 1 เสียง ชวนเพื่อนมาโหวตได้เลย", "ok");
     $("#pText").value = ""; $("#pZh").value = ""; $("#pWhy").value = "";
@@ -1410,15 +1563,21 @@ $("#propForm").addEventListener("submit", async e => {
 function renderProposals() {
   const cc = confCount(), need = L.votesNeeded(cc);
   $("#propRule").textContent = `สมาชิกทริปที่ยืนยันแล้วโหวตได้คนละ 1 เสียง ต้องได้เห็นด้วย ${need} เสียงขึ้นไป (เกินครึ่งของ ${cc || 0} คน) แพลนจะเปลี่ยนให้อัตโนมัติ ถ้าไม่เห็นด้วยถึง ${need} เสียงข้อเสนอจะตกไป`;
-  const open = L.rankProposals(proposals.filter(p => p.status === "open"));
-  const done = proposals.filter(p => p.status !== "open");
+  const pkOf = p => PLAN_KEYS.includes(p.plan) ? p.plan : "A";
+  const allOpen = proposals.filter(p => p.status === "open");
+  const open = L.rankProposals(allOpen.filter(p => pkOf(p) === viewPlan));
+  const done = proposals.filter(p => p.status !== "open" && pkOf(p) === viewPlan);
   $("#propEmpty").hidden = open.length > 0;
-  $("#propDot").hidden = !open.length; $("#propDot").textContent = open.length;
+  $("#propEmpty").textContent = `ยังไม่มีข้อเสนอสำหรับแพลน ${viewPlan}`;
+  $("#propDot").hidden = !allOpen.length; $("#propDot").textContent = allOpen.length;
+  $("#propPlanLbl").textContent = `แพลน ${viewPlan} · ${planName(viewPlan)}`;
+  renderPlanSwitch();
   $("#propList").innerHTML = open.map((p, i) => propHTML(p, i, need)).join("");
   $("#histCard").hidden = !done.length;
   $("#histList").innerHTML = done.map(p => propHTML(p, -1, need)).join("");
 }
 function propHTML(p, i, need) {
+  const pp = plans[PLAN_KEYS.includes(p.plan) ? p.plan : "A"];
   const t = L.tally(p), vd = L.verdict(p, confCount());
   const canVote = isCrew() && !!me();
   const myV = me() ? (Object.values(p.votes || {}).filter(v => v && v.who === me()).sort((a, b) => b.at - a.at)[0]?.v || 0) : 0;
@@ -1434,12 +1593,12 @@ function propHTML(p, i, need) {
       ${vd.state === "pass" && canVote ? `<button class="btn small" type="button" data-act="apply" data-id="${p.id}">ปรับแพลนตามนี้</button>` : ""}
       ${p.owner === uid || isOwner() ? `<button class="btn link" type="button" data-act="withdraw" data-id="${p.id}">ถอนข้อเสนอ</button>` : ""}
     </div>`;
-  } else if (p.status === "applied" && p.appliedVersion === plan.version && p.prevPlan && isCrew()) {
+  } else if (p.status === "applied" && p.appliedVersion === pp.version && p.prevPlan && isCrew()) {
     actions = `<div class="btns"><button class="btn link" type="button" data-act="revert" data-id="${p.id}">ย้อนแพลนกลับก่อนข้อนี้</button></div>`;
   }
   return `<li class="prop${i === 0 ? " top" : ""}">
     <div class="head">${i >= 0 ? `<span class="rank">${i === 0 ? "อันดับ 1" : "อันดับ " + (i + 1)}</span>` : statusChip}
-      <span class="title">${esc(L.describeProposal(p, plan))}</span></div>
+      <span class="title">${esc(L.describeProposal(p, pp))}</span></div>
     ${p.reason ? `<p class="why">"${esc(p.reason)}"</p>` : ""}
     ${p.status === "open" ? `<div class="bar" role="img" aria-label="เห็นด้วย ${t.up.length} ไม่เห็นด้วย ${t.down.length} จากที่ต้องการ ${need}"><i class="u" style="width:${pctU}%"></i><i class="d" style="width:${pctD}%"></i></div>` : ""}
     <div class="voters">เสนอโดย ${esc(p.byName || nameOf(p.by))}${t.up.length ? ` · เห็นด้วย: ${names(t.up)}` : ""}${t.down.length ? ` · ไม่เห็นด้วย: ${names(t.down)}` : ""}${p.result ? ` · ${esc(p.result)}` : ""}</div>
@@ -1469,13 +1628,15 @@ async function tryResolve(id, force = false) {
   const cc = confCount();
   await runTransaction(db, async tx => {
     const pRef = doc(colProp, id);
-    const ps = await tx.get(pRef), pls = await tx.get(planRef);
+    const ps = await tx.get(pRef);
     if (!ps.exists() || ps.data().status !== "open") return;
+    const pk = PLAN_KEYS.includes(ps.data().plan) ? ps.data().plan : "A", planRef = planRefs[pk];
+    const pls = await tx.get(planRef);
     const p = { id, ...ps.data() }, vd = L.verdict(p, cc);
     if (vd.state === "fail") { tx.update(pRef, { status: "rejected", result: `ไม่เห็นด้วย ${vd.down.length} เสียง` }); return; }
     if (vd.state !== "pass" && !force) return;
     if (vd.state !== "pass") throw new Error("ยังได้เสียงไม่ถึงเกณฑ์");
-    const cur = pls.exists() ? { ...JSON.parse(pls.data().data), version: pls.data().version } : structuredClone(DEFAULT_PLAN);
+    const cur = pls.exists() ? { ...JSON.parse(pls.data().data), version: pls.data().version } : structuredClone(PLAN_DEFAULTS[pk]);
     let np;
     try { np = L.applyProposal(cur, p); }
     catch (err) { tx.update(pRef, { status: "rejected", result: err.message }); return; }
@@ -1487,14 +1648,62 @@ async function tryResolve(id, force = false) {
 async function revert(id) {
   await runTransaction(db, async tx => {
     const pRef = doc(colProp, id);
-    const ps = await tx.get(pRef), pls = await tx.get(planRef);
-    const p = ps.data(), curVer = pls.data()?.version;
+    const ps = await tx.get(pRef);
+    const p = ps.data(), planRef = planRefs[PLAN_KEYS.includes(p?.plan) ? p.plan : "A"];
+    const pls = await tx.get(planRef), curVer = pls.data()?.version;
     if (!p || p.status !== "applied" || p.appliedVersion !== curVer) throw new Error("แพลนถูกเปลี่ยนต่อไปแล้ว ย้อนข้อนี้ไม่ได้");
     const prev = JSON.parse(p.prevPlan); prev.version = curVer + 1;
     tx.set(planRef, { data: JSON.stringify(prev), version: prev.version, updatedAt: serverTimestamp() });
     tx.update(pRef, { status: "reverted", result: `ย้อนกลับเป็นแพลนฉบับที่ ${prev.version}` });
   });
 }
+
+/* ============== FOOD: ร้านเด็ด ============== */
+const foodImg = {};
+function priceTHB(p) {
+  const m = String(p).match(/¥\s*(\d+)(?:\s*[–-]\s*(\d+))?/); if (!m) return "";
+  const a = Math.round(+m[1] * rate() / 10) * 10, b = m[2] ? Math.round(+m[2] * rate() / 10) * 10 : 0;
+  return `≈ ${baht(a)}${b ? "–" + baht(b) : ""} บาท/คน`;
+}
+function renderFood() {
+  const city = $("input[name=fcity]:checked")?.value || "";
+  $("#foodList").innerHTML = FOOD.map((f, i) => ({ f, i })).filter(({ f }) => !city || f.city === city).map(({ f, i }) => {
+    const im = foodImg[i];
+    return `<article class="food">
+      <div class="fimg">${im ? `<img src="${esc(im.src)}" alt="" loading="lazy" referrerpolicy="no-referrer"><a class="fcr" href="${esc(im.page)}" target="_blank" rel="noopener">ภาพ: ${esc(im.by)}${im.lic ? " · " + esc(im.lic) : ""}</a>` : `<span aria-hidden="true">${f.city === "เวยไห่" ? "🦀" : "🥟"}</span>`}</div>
+      <div class="fbd">
+        <div class="fhd"><span class="chip ${f.city === "เวยไห่" ? "maybe" : "info"}">${esc(f.city)}</span><span class="fprice">${esc(f.price)}<small>${esc(priceTHB(f.price))}</small></span></div>
+        <b>${esc(f.th)}</b>
+        <button class="zhcopy" type="button" data-copy="${esc(f.zh)}" title="คัดลอกชื่อจีน">${esc(f.zh)} ⧉</button>
+        <p>${esc(f.dish)}</p>
+        <small>📍 ${esc(f.area)}</small>
+        <small>🗓️ ${esc(f.when)}</small>
+      </div></article>`;
+  }).join("");
+}
+$("#foodCity").addEventListener("change", renderFood);
+$("#foodList").addEventListener("click", async e => {
+  const b = e.target.closest("[data-copy]"); if (!b) return;
+  try { await navigator.clipboard.writeText(b.dataset.copy); const t = b.textContent; b.textContent = "คัดลอกแล้ว ✓"; setTimeout(() => { b.textContent = t; }, 1400); } catch (err) {}
+});
+(async function loadFoodImages() {
+  const KEY = "ts_food_v1";
+  try { const c = JSON.parse(localStorage.getItem(KEY) || "null"); if (c && Date.now() - c.ts < 7 * 864e5 && c.n === FOOD.length) { Object.assign(foodImg, c.img); renderFood(); return; } } catch (e) {}
+  const API = "https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrnamespace=6&gsrlimit=15&prop=imageinfo&iiprop=url|extmetadata|size&iiurlwidth=500&iiextmetadatafilter=LicenseShortName|Artist&gsrsearch=";
+  const clean = s => String(s || "").replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
+  await Promise.all(FOOD.map(async (f, i) => {
+    try {
+      const d = await fetch(API + encodeURIComponent(f.img.q + " filetype:bitmap")).then(r => r.json());
+      const ps = Object.values(d.query?.pages || {}).filter(p => p.imageinfo && f.img.re.test(p.title) && p.imageinfo[0].thumburl && p.imageinfo[0].width >= p.imageinfo[0].height * 0.9)
+        .sort((a, b) => (a.index || 0) - (b.index || 0));
+      const p = ps[0]; if (!p) return;
+      const ii = p.imageinfo[0], m = ii.extmetadata || {};
+      foodImg[i] = { src: ii.thumburl, page: ii.descriptionurl, by: clean(m.Artist?.value).slice(0, 40) || "Wikimedia Commons", lic: clean(m.LicenseShortName?.value) };
+    } catch (e) {}
+  }));
+  try { localStorage.setItem(KEY, JSON.stringify({ ts: Date.now(), n: FOOD.length, img: foodImg })); } catch (e) {}
+  renderFood();
+})();
 
 /* ============== SPLIT: draft form ============== */
 let editingExp = null;
@@ -1636,7 +1845,7 @@ function resetExpForm(keepMsg) {
   editingExp = null; draft = newDraft(); rateTouched = false;
   $("#eTitle").value = ""; $("#eAmt").value = ""; $("#eNote").value = ""; $("#eDate").value = todayISO(); $("#eCat").value = "food";
   setRadio("kind", "expense"); setRadio("mode", "equal"); setRadio("cur", "THB");
-  $("#rcptPrev").hidden = true; $("#rcptPrev").removeAttribute("src");
+  clearAttach();
   $("#expFormTitle").textContent = "เพิ่มค่าใช้จ่าย"; $("#expSave").textContent = "บันทึก";
   if (!keepMsg) { setMsgEl($("#expMsg"), ""); setMsgEl($("#aiMsg"), ""); }
   renderDraft();
@@ -1679,11 +1888,11 @@ $("#expForm").addEventListener("submit", async e => {
 /* ============== AI: read bill / slip / ticket ============== */
 $("#camBtn").addEventListener("click", () => $("#fileCam").click());
 $("#pickBtn").addEventListener("click", () => $("#fileAny").click());
-["#fileCam", "#fileAny"].forEach(s => $(s).addEventListener("change", e => { const f = e.target.files[0]; e.target.value = ""; if (f) scanFile(f); }));
+["#fileCam", "#fileAny"].forEach(s => $(s).addEventListener("change", e => { const f = e.target.files[0]; e.target.value = ""; if (f) attachFile(f); }));
 const scanBox = $("#scanBox");
 scanBox.addEventListener("dragover", e => { e.preventDefault(); scanBox.classList.add("drag"); });
 scanBox.addEventListener("dragleave", () => scanBox.classList.remove("drag"));
-scanBox.addEventListener("drop", e => { e.preventDefault(); scanBox.classList.remove("drag"); const f = e.dataTransfer.files[0]; if (f) scanFile(f); });
+scanBox.addEventListener("drop", e => { e.preventDefault(); scanBox.classList.remove("drag"); const f = e.dataTransfer.files[0]; if (f) attachFile(f); });
 
 function loadImage(file) {
   return new Promise((res, rej) => { const url = URL.createObjectURL(file), img = new Image();
@@ -1745,13 +1954,17 @@ function aiErrorText(err) {
   if (/fetch|network|Failed to/i.test(s)) return "เชื่อมต่อ AI ไม่ได้ ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่";
   return "AI อ่านไม่สำเร็จ (" + s.trim().slice(0, 120) + ") กรอกเองได้เลย";
 }
-async function scanFile(file) {
+/* แนบก่อน → กดปุ่มให้ AI กรอก (pending = ไฟล์ที่แนบไว้ รอส่งให้ AI) */
+function clearAttach() {
+  pending = null; draft.receipt = null;
+  $("#rcptPrev").hidden = true; $("#rcptPrev").removeAttribute("src");
+  $("#aiBar").hidden = true; $("#aiFile").textContent = "";
+}
+async function attachFile(file, label) {
   const msg = $("#aiMsg");
-  const isPdf = file.type === "application/pdf", isImg = file.type.startsWith("image/");
+  const isPdf = file.type === "application/pdf", isImg = (file.type || "").startsWith("image/");
   if (!isPdf && !isImg) return setMsgEl(msg, "รองรับเฉพาะรูปภาพหรือ PDF", "err");
   if (file.size > 15 * 1024 * 1024) return setMsgEl(msg, "ไฟล์ใหญ่เกิน 15 MB", "err");
-  msg.className = "msg"; msg.innerHTML = '<span class="spin" aria-hidden="true"></span>AI กำลังอ่าน…';
-  $("#camBtn").disabled = $("#pickBtn").disabled = true;
   try {
     let part, thumb = null;
     if (isImg) {
@@ -1763,8 +1976,25 @@ async function scanFile(file) {
       part = { inlineData: { mimeType: "application/pdf", data: await fileB64(file) } };
       $("#rcptPrev").hidden = true;
     }
+    pending = { part };
     draft.receipt = { thumb };
-    if (draft.kind === "fund") { setMsgEl(msg, "แนบสลิปไว้แล้ว ใส่ยอดแล้วกดบันทึก", "ok"); return; }
+    $("#aiBar").hidden = false; $("#aiGo").disabled = !canWrite();
+    $("#aiFile").textContent = label || (isPdf ? "แนบ PDF แล้ว" : "แนบรูปแล้ว");
+    setMsgEl(msg, draft.kind === "fund" ? "แนบสลิปแล้ว ใส่ยอดเอง หรือกด ✨ ให้ AI อ่านยอดให้" : "แนบแล้ว กด ✨ ให้ AI กรอกให้ หรือกรอกเองด้านล่างก็ได้", "ok");
+    return true;
+  } catch (err) { setMsgEl(msg, err.message || "แนบไฟล์ไม่ได้", "err"); return false; }
+}
+$("#aiClear").addEventListener("click", () => { clearAttach(); setMsgEl($("#aiMsg"), ""); });
+$("#aiGo").addEventListener("click", () => runAI());
+async function runAI() {
+  const msg = $("#aiMsg");
+  if (!pending) return setMsgEl(msg, "แนบรูปบิลหรือสลิปก่อน", "err");
+  if (!canWrite()) return setMsgEl(msg, "เข้าสู่ระบบในฐานะสมาชิกทริปก่อน", "err");
+  const t0 = Date.now();
+  const tick = extra => { msg.className = "msg"; msg.innerHTML = `<span class="spin" aria-hidden="true"></span>${extra || "AI กำลังอ่าน…"} ${Math.round((Date.now() - t0) / 1000)} วิ <small>(ปกติ 3–10 วินาที)</small>`; };
+  let label = ""; tick(); const iv = setInterval(() => tick(label), 1000);
+  $("#aiGo").disabled = $("#camBtn").disabled = $("#pickBtn").disabled = true;
+  try {
     const names = members().map(m => m.name).join(", ") || "-";
     const prompt = `อ่านเอกสารการเงินในไฟล์นี้ (ใบเสร็จ/บิลร้านอาหาร/สลิปโอนเงินธนาคารหรือ Alipay/WeChat/ตั๋วเครื่องบิน รถไฟ ค่าเข้าชม) ของทริปเที่ยวชิงเต่า ประเทศจีน
 - total = ยอดที่จ่ายจริงสุทธิ, currency: ¥ / 元 / RMB = CNY, ฿ / บาท = THB
@@ -1773,17 +2003,25 @@ async function scanFile(file) {
 - ชื่อคนในทริป (ใช้จับคู่ชื่อ): ${names}
 - วันนี้คือ ${todayISO()} ถ้าวันที่เป็น พ.ศ. ให้แปลงเป็น ค.ศ.
 ถ้าอ่านตัวเลขไม่ชัดให้เดาใกล้เคียงที่สุดและบอกใน note`;
-    const r = await askAI([prompt, part], () => { msg.innerHTML = '<span class="spin" aria-hidden="true"></span>AI ตัวหลักคนใช้เยอะ กำลังสลับไปตัวสำรอง…'; });
+    const r = await askAI([prompt, pending.part], () => { label = "AI ตัวหลักคนใช้เยอะ กำลังสลับไปตัวสำรอง…"; });
     const j = JSON.parse(r.response.text());
-    applyAI(j);
+    applyAI(j, Math.round((Date.now() - t0) / 1000));
   } catch (err) {
     console.warn(err);
     setMsgEl(msg, aiErrorText(err), "err");
-  } finally { $("#camBtn").disabled = $("#pickBtn").disabled = !canWrite(); }
+  } finally { clearInterval(iv); $("#aiGo").disabled = $("#camBtn").disabled = $("#pickBtn").disabled = !canWrite(); }
 }
-function applyAI(j) {
+function applyAI(j, secs) {
   const ms = members();
   draft.source = "ai";
+  if (draft.kind === "fund") {
+    if (j.total > 0) $("#eAmt").value = Math.round(j.total * 100) / 100;
+    setRadio("cur", j.currency === "CNY" ? "CNY" : "THB");
+    if (j.date && /^\d{4}-\d{2}-\d{2}$/.test(j.date)) $("#eDate").value = j.date;
+    renderDraft();
+    setMsgEl($("#aiMsg"), `AI อ่านยอดเข้ากองกลางได้ ${L.fmt(j.total || 0)} ${j.currency === "CNY" ? "หยวน" : "บาท"} (${secs} วิ) ตรวจแล้วกดบันทึก`, "ok");
+    return;
+  }
   const fromId = L.matchName(j.fromName, ms), toId = L.matchName(j.toName, ms);
   const isSettle = j.docType === "transfer_slip" && fromId && toId && fromId !== toId;
   draft.kind = isSettle ? "settle" : "expense"; setRadio("kind", draft.kind);
@@ -1802,8 +2040,8 @@ function applyAI(j) {
   const cur = j.currency === "CNY" ? "หยวน" : j.currency === "OTHER" ? "(สกุลเงินอื่น ตรวจสอบด้วย)" : "บาท";
   const itemsTxt = draft.items.length > 1 ? ` · พบ ${draft.items.length} รายการ ถ้าแต่ละคนสั่งไม่เหมือนกันเลือก "หารตามรายการที่สั่ง"` : "";
   setMsgEl($("#aiMsg"), isSettle
-    ? `AI อ่านเป็นสลิปโอนคืน: ${nameOf(fromId)} → ${nameOf(toId)} ${L.fmt(j.total)} ${cur} ตรวจแล้วกดบันทึก`
-    : `AI อ่านได้ ${L.fmt(j.total || 0)} ${cur}${itemsTxt} ตรวจแล้วเลือกว่าใครจ่ายและหารกับใคร จากนั้นกดบันทึก`, "ok");
+    ? `AI อ่านเป็นสลิปโอนคืน (${secs} วิ): ${nameOf(fromId)} → ${nameOf(toId)} ${L.fmt(j.total)} ${cur} ตรวจแล้วกดบันทึก`
+    : `AI อ่านได้ ${L.fmt(j.total || 0)} ${cur} (${secs} วิ)${itemsTxt} ตรวจแล้วเลือกว่าใครจ่ายและหารกับใคร จากนั้นกดบันทึก`, "ok");
   $("#expForm").scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
@@ -1945,7 +2183,7 @@ $("#expList").addEventListener("click", async ev => {
     $("#eDate").value = e.date || todayISO(); $("#eCat").value = e.category || "other";
     setRadio("kind", draft.kind); setRadio("mode", draft.splitMode); setRadio("cur", e.currency || "THB");
     $("#eRate").value = e.currency === "CNY" ? e.rate : rate();
-    $("#rcptPrev").hidden = true;
+    pending = null; $("#rcptPrev").hidden = true; $("#aiBar").hidden = true;
     $("#expFormTitle").textContent = "แก้ไขรายการ"; $("#expSave").textContent = "บันทึกการแก้ไข";
     setMsgEl($("#expMsg"), "กำลังแก้ไข กด \"ล้างฟอร์ม\" เพื่อยกเลิก");
     renderDraft();
@@ -2044,7 +2282,7 @@ function docItem(d) {
   const whom = d.kind === "private" && d.sid && d.sid !== me() ? ` · ของ ${esc(nameOf(d.sid))}` : "";
   return `<div class="docitem"><span class="ico" aria-hidden="true">${ico}</span>
     <span><b>${esc(d.title)}</b><small>${esc(tn)}${whom} · ${d.mime === "application/pdf" ? "PDF" : "รูปภาพ"} · ${esc(d.byName || "")} ${tsDate(d.createdAt)}</small></span>
-    <span class="acts"><button class="btn ghost small" type="button" data-open="${d.id}">เปิด</button>${canDel ? `<button class="btn link" type="button" data-del="${d.id}">ลบ</button>` : ""}</span></div>`;
+    <span class="acts">${["bill", "ticket", "hotel"].includes(d.type) && canWrite() ? `<button class="btn ai small" type="button" data-ai="${d.id}" title="ให้ AI อ่านเอกสารนี้แล้วกรอกเป็นค่าใช้จ่าย">✨ ลงค่าใช้จ่าย</button>` : ""}<button class="btn ghost small" type="button" data-open="${d.id}">เปิด</button>${canDel ? `<button class="btn link" type="button" data-del="${d.id}">ลบ</button>` : ""}</span></div>`;
 }
 function renderDocs() {
   if (!isCrew()) return;
@@ -2075,8 +2313,23 @@ function renderDocs() {
 }
 $("#dWho").addEventListener("change", () => { $("#dWho").dataset.touched = "1"; });
 $("#p-docs").addEventListener("click", async e => {
-  const o = e.target.closest("[data-open]"), d = e.target.closest("[data-del]"), rc = e.target.closest("[data-rc]");
+  const o = e.target.closest("[data-open]"), d = e.target.closest("[data-del]"), rc = e.target.closest("[data-rc]"), ai = e.target.closest("[data-ai]");
   if (rc) return showReceipt(rc.dataset.rc, "รูปบิล");
+  if (ai) {
+    const id = ai.dataset.ai, meta = [...docsList.all, ...docsList.mine, ...docsList.shared].find(x => x.id === id);
+    ai.disabled = true;
+    try {
+      const s = await getDoc(doc(colFiles, id)); if (!s.exists()) throw new Error("ไม่พบไฟล์");
+      const f = s.data(), bin = atob(f.data), u = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i);
+      const file = new File([u], meta?.name || "bill", { type: f.mime });
+      if (editingExp) resetExpForm();
+      if (draft.kind === "settle") { draft.kind = "expense"; setRadio("kind", "expense"); renderDraft(); }
+      selectTab("t-split");
+      if (await attachFile(file, "จากศูนย์เอกสาร: " + (meta?.title || ""))) { $("#expCard").scrollIntoView({ behavior: "smooth", block: "start" }); runAI(); }
+    } catch (err) { setMsgEl($("#docMsg"), "เปิดไฟล์ไม่ได้ (" + (err.code ? errText(err) : err.message) + ")", "err"); }
+    finally { ai.disabled = false; }
+    return;
+  }
   if (o) {
     const id = o.dataset.open, meta = [...docsList.all, ...docsList.mine, ...docsList.shared].find(x => x.id === id);
     o.disabled = true; const old = o.textContent; o.textContent = "กำลังเปิด…";
@@ -2325,12 +2578,14 @@ const HELP = [
 <tr><td>ดูพาสปอร์ตและข้อมูลฉุกเฉิน</td><td>ทุกคน</td><td>ของตัวเอง</td><td>–</td></tr></table></div>` },
   { t: "ลงชื่อไปทริป", b: `<ol><li>แท็บ <b>ลงชื่อ</b> กรอกชื่อเล่น เบอร์โทร WeChat เลือก “ไปแน่นอน” หรือ “ยังไม่แน่ใจ”</li><li>กด <b>ลงชื่อ</b> สถานะจะเป็น “รอยืนยัน”</li><li>เมื่อผู้จัดทริปยืนยัน จะได้ชื่อผู้ใช้และรหัสผ่านทาง LINE</li></ol><p>เบอร์และ WeChat ที่กรอกตอนลงชื่อ เห็นเฉพาะผู้จัดทริป</p>` },
   { t: "เข้าสู่ระบบ", b: `<ol><li>กด <b>เข้าสู่ระบบ</b> มุมขวาบน</li><li>ใส่ชื่อผู้ใช้และรหัสผ่านจากผู้จัดทริป</li></ol><p>ลืมรหัส: แจ้งผู้จัดทริปให้กด “ตั้งรหัสใหม่” · ออกจากระบบ: ปุ่มมุมขวาบน</p>` },
-  { t: "หารค่าใช้จ่าย และเงินกองกลาง", b: `<p><b>ลงบิล:</b> แท็บหารค่าใช้จ่าย › ถ่ายรูปบิลให้ AI อ่าน หรือกรอกเอง › เลือก ¥ หรือ ฿ › เลือก <b>ใครจ่าย</b> (คนใดคนหนึ่ง หรือ 🏦 กองกลาง) › เลือก <b>หารกับใคร</b> › บันทึก</p>
+  { t: "หารค่าใช้จ่าย และเงินกองกลาง", b: `<p><b>ลงบิล:</b> แท็บหารค่าใช้จ่าย › ถ่ายรูปบิล/เลือกรูปสลิปเพื่อแนบ › กด <b>✨ ให้ AI กรอกให้</b> (ราว 3–10 วินาที) หรือกรอกเอง › เลือก ¥ หรือ ฿ › เลือก <b>ใครจ่าย</b> (คนใดคนหนึ่ง หรือ 🏦 กองกลาง) › เลือก <b>หารกับใคร</b> › บันทึก</p>
 <p><b>ใส่เงินกองกลาง:</b> กด “แจ้งโอนเข้ากองกลาง” ใส่ยอด แนบสลิป แล้วบันทึก ผู้จัดทริปกดยืนยันเมื่อได้รับเงินจึงนับ</p>
 <p><b>ยอดสุทธิ</b> = เงินที่ออกไป + เงินที่ใส่กองกลาง − ส่วนของตัวเอง · บวก = ได้คืน · ลบ = ต้องโอน ระบบสรุปให้ว่าใครโอนให้ใคร รวมถึงกองกลางคืนเงินที่เหลือ</p>
 <p><b>เงินหยวน:</b> ใส่เป็น ¥ แล้วระบบแปลงเป็นบาทด้วยเรทที่ผู้จัดตั้ง ใส่เป็น ฿ ไม่แปลง</p>` },
-  { t: "โหวตเปลี่ยนแพลน", b: `<p>สมาชิกที่ยืนยันแล้วเสนอเพิ่ม ตัด ย้าย สลับวัน หรือเลื่อนวันเดินทางได้ โหวตคนละ 1 เสียง ถ้าเห็นด้วยเกินครึ่งของคนที่ยืนยันแล้ว แพลนเปลี่ยนให้อัตโนมัติ</p>` },
-  { t: "เอกสาร และโปรไฟล์", b: `<ul><li><b>เอกสารของฉัน</b> (ส่วนตัว): หน้าพาสปอร์ต วีซ่า ประกัน — เห็นเฉพาะเรากับผู้จัดทริป</li><li><b>เอกสารกลาง</b>: ใบจองโรงแรม ตั๋ว โปรแกรม — สมาชิกทุกคนเห็น</li><li>รูปย่อขนาดให้อัตโนมัติ PDF ไม่เกิน 680KB</li><li>แท็บ <b>สมาชิก</b>: กรอกชื่อตามพาสปอร์ต เบอร์ WeChat LINE พร้อมเพย์ และผู้ติดต่อฉุกเฉิน (ส่วนนี้เห็นแค่เรากับผู้จัด)</li></ul>` },
+  { t: "แพลน A / B และโหวตเปลี่ยนแพลน", b: `<p>แท็บ <b>แพลน &amp; โหวต</b> มี 2 แพลน: <b>A ชิงเต่าล้วน</b> และ <b>B ชิงเต่า + เวยไห่</b> กดการ์ดด้านบนเพื่อสลับดู แล้วกด <b>🤍 ฉันชอบแพลนนี้</b> (เลือกได้แพลนเดียว เปลี่ยนใจได้) ผู้จัดทริปกด <b>ตั้งเป็นแพลนหลัก</b></p>
+    <p>ข้อเสนอเปลี่ยนแพลนแยกตามแพลนที่กำลังดู: เสนอเพิ่ม ตัด ย้าย สลับวัน หรือเลื่อนวันเดินทาง โหวตคนละ 1 เสียง ถ้าเห็นด้วยเกินครึ่งของคนที่ยืนยันแล้ว แพลนนั้นเปลี่ยนให้อัตโนมัติ</p>
+    <p><b>ร้านเด็ด:</b> ใต้แพลนมีร้านดังพร้อมราคาต่อคน (¥ และ ≈ บาท) กดชื่อจีนเพื่อคัดลอกไปค้นในแผนที่หรือยื่นให้คนขับ</p>` },
+  { t: "เอกสาร และโปรไฟล์", b: `<ul><li><b>เอกสารของฉัน</b> (ส่วนตัว): หน้าพาสปอร์ต วีซ่า ประกัน — เห็นเฉพาะเรากับผู้จัดทริป</li><li><b>เอกสารกลาง</b>: ใบจองโรงแรม ตั๋ว โปรแกรม — สมาชิกทุกคนเห็น</li><li>รูปย่อขนาดให้อัตโนมัติ PDF ไม่เกิน 680KB</li><li>เอกสารประเภทบิล ตั๋ว ใบจองโรงแรม มีปุ่ม <b>✨ ลงค่าใช้จ่าย</b> ให้ AI อ่านแล้วกรอกฟอร์มค่าใช้จ่ายให้ทันที</li><li>แท็บ <b>สมาชิก</b>: กรอกชื่อตามพาสปอร์ต เบอร์ WeChat LINE พร้อมเพย์ และผู้ติดต่อฉุกเฉิน (ส่วนนี้เห็นแค่เรากับผู้จัด)</li></ul>` },
   { t: "สำหรับผู้จัดทริป", owner: true, b: `<ol><li>แท็บ <b>จัดการทริป</b>: กด “นี่คือฉัน” ที่ชื่อตัวเองครั้งแรก เพื่อผูกบัญชีกับรายชื่อ</li><li>กด <b>ยืนยันเข้าทริป</b> ที่ผู้สมัคร › ตรวจชื่อผู้ใช้/รหัส › สร้างบัญชี › คัดลอกข้อความส่ง LINE</li><li>ตั้ง <b>เรทหยวน</b> (มีปุ่มดึงเรทวันนี้) และข้อความเครดิต</li><li>แท็บ <b>ประมาณการ</b> › “แก้รายการ” เพิ่ม ลบ แก้ยอด ¥/฿ ต่อคนหรือหารทั้งกลุ่ม แล้วกดบันทึก</li><li>ยืนยันเงินเข้ากองกลางในการ์ดกองกลาง</li><li>แท็บ <b>เอกสาร</b> ดูเช็กลิสต์พาสปอร์ต แนบเอกสารแทนสมาชิกได้</li><li>หลังทริป: ตรวจบิล ส่งสรุปเข้า LINE แล้วกด <b>ปิดยอดทริป</b></li></ol>` },
 ];
 function openHelp() {
