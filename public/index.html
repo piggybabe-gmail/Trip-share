@@ -1000,7 +1000,7 @@ const firebaseConfig = {
   appId: "1:213309730792:web:9b17c9ce1ce1c84f08be5d"
 };
 const TRIP_ID = "qingdao";
-const AI_MODELS = ["gemini-3.8-flash", "gemini-3.5-flash"];  // ตัวหลัก → ตัวสำรอง (Firebase AI Logic, Gemini Developer API)
+const AI_MODELS = ["gemini-3.8-flash", "gemini-3.5-flash", "gemini-3.5-flash-lite"];  // ตัวหลัก → ตัวสำรอง (Firebase AI Logic, Gemini Developer API)
 const AI_TIMEOUT_MS = 30000;
 const APP_CHECK = { provider: "enterprise", siteKey: "6Le3bcotAAAAAANQYjV6FUFJYOfyQV7YqjtyECE8" };
 const DEFAULT_RATE = 4.95;                // บาท ต่อ 1 หยวน (ค่าเริ่มต้น ผู้จัดทริปแก้ได้ในแท็บจัดการทริป)
@@ -1931,7 +1931,8 @@ function getModel() {
     return AI_MODELS.map(name => m.getGenerativeModel(ai, { model: name, generationConfig: { responseMimeType: "application/json", responseSchema: schema } }, { timeout: AI_TIMEOUT_MS }));
   })();
 }
-const retryable = err => /fetch-error|timeout|abort|high demand|overloaded|unavailable|RESOURCE_EXHAUSTED|\b(429|500|502|503|504)\b/i.test(String(err?.code || "") + " " + String(err?.message || err));
+const errStr = err => (String(err?.code || "") + " " + String(err?.message || err) + " " + JSON.stringify(err?.customErrorData?.errorDetails || "")).replace(/https?:\/\/\S+/g, "");
+const retryable = err => /fetch-error|timeout|abort|high demand|overloaded|unavailable|RESOURCE_EXHAUSTED|not found|NOT_FOUND|not supported|\b(404|429|500|502|503|504)\b/i.test(errStr(err));
 async function askAI(parts, onFallback) {
   const models = await getModel();
   let lastErr;
@@ -1946,13 +1947,16 @@ async function askAI(parts, onFallback) {
   throw lastErr;
 }
 function aiErrorText(err) {
-  const s = String(err?.code || "") + " " + String(err?.message || err);
-  if (/api-not-enabled|firebasevertexai|not been used|PERMISSION_DENIED/i.test(s)) return "ยังไม่ได้เปิดใช้ AI ในโปรเจกต์ Firebase นี้ ระหว่างนี้กรอกเองได้เลย";
-  if (/app-?check|unauthenticated|401|403/i.test(s)) return "ยืนยันตัวตนกับ AI ไม่ผ่าน (App Check) ลองรีเฟรชหน้าแล้วกดอ่านใหม่ หรือกรอกเองได้เลย";
-  if (/quota|429|RESOURCE_EXHAUSTED/i.test(s)) return "AI ใช้งานเกินโควตาฟรีของวันนี้ ลองใหม่ภายหลัง หรือกรอกเอง";
-  if (/high demand|overloaded|unavailable|timeout|\b50[0-4]\b/i.test(s)) return "AI ของ Google คนใช้เยอะมากตอนนี้ ลองกดอ่านใหม่อีกครั้งในอีกสักครู่ หรือกรอกเองได้เลย";
-  if (/fetch|network|Failed to/i.test(s)) return "เชื่อมต่อ AI ไม่ได้ ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่";
-  return "AI อ่านไม่สำเร็จ (" + s.trim().slice(0, 120) + ") กรอกเองได้เลย";
+  const s = errStr(err);                       // ตัด URL ออกก่อน ไม่ให้ชื่อโดเมนทำให้จับสาเหตุผิด
+  const why = " [" + s.replace(/\s+/g, " ").trim().slice(0, 160) + "]";
+  if (/app-?check|UNAUTHENTICATED|\b401\b/i.test(s)) return "ยืนยันตัวตนกับ AI ไม่ผ่าน (App Check) รีเฟรชหน้าแล้วกดอีกครั้ง หรือกรอกเองได้เลย" + why;
+  if (/API_KEY_SERVICE_BLOCKED|API_KEY_HTTP_REFERRER_BLOCKED|are blocked/i.test(s)) return "คีย์ของเว็บถูกจำกัดไม่ให้เรียก AI ระหว่างนี้กรอกเองได้เลย" + why;
+  if (/api-not-enabled|SERVICE_DISABLED|has not been used|is disabled/i.test(s)) return "ยังไม่ได้เปิดใช้ AI ในโปรเจกต์ Firebase นี้ ระหว่างนี้กรอกเองได้เลย" + why;
+  if (/quota|\b429\b|RESOURCE_EXHAUSTED/i.test(s)) return "AI ใช้งานเกินโควตาฟรีของวันนี้ ลองใหม่ภายหลัง หรือกรอกเอง" + why;
+  if (/not found|NOT_FOUND|not supported|\b404\b/i.test(s)) return "ไม่พบรุ่น AI ที่ตั้งไว้ แจ้งผู้จัดทริป ระหว่างนี้กรอกเองได้เลย" + why;
+  if (/high demand|overloaded|unavailable|timeout|\b50[0-4]\b/i.test(s)) return "AI ของ Google คนใช้เยอะมากตอนนี้ ลองกดอีกครั้งในอีกสักครู่ หรือกรอกเองได้เลย" + why;
+  if (/fetch|network|Failed to/i.test(s)) return "เชื่อมต่อ AI ไม่ได้ ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่" + why;
+  return "AI อ่านไม่สำเร็จ กรอกเองได้เลย" + why;
 }
 /* แนบก่อน → กดปุ่มให้ AI กรอก (pending = ไฟล์ที่แนบไว้ รอส่งให้ AI) */
 function clearAttach() {
